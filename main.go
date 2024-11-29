@@ -22,7 +22,16 @@ func main() {
 
 	// Create the message content with mention
 	message := WebhookMessage{
-		Content: fmt.Sprintf("Hello <@%s>, you have a notification!", userID),
+		Content: fmt.Sprintf(
+			`[Announcement]
+%s <@%s> 🆚 Harrod HO
+%s %s at Table %d`,
+			"David Zhang",
+			userID,
+			"Open Single", // Event
+			"Qualification",
+			3, // Table
+		),
 	}
 
 	jsonData, err := json.Marshal(message)
@@ -40,10 +49,10 @@ func main() {
 	defer resp.Body.Close()
 
 	// Check the response status
-	if resp.StatusCode != http.StatusOK {
-		fmt.Println("Failed to send message, status code:", resp.StatusCode)
-		return
-	}
+	// if resp.StatusCode != http.StatusOK {
+	// 	fmt.Println("Failed to send message, status code:", resp.StatusCode)
+	// 	return
+	// }
 
 	fmt.Println("Message sent successfully!")
 }
