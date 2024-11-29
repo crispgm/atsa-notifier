@@ -1,0 +1,11 @@
+match:
+  batches:
+    - name: First Call
+      interval: 0
+      voice: no
+    - name: Second Call
+      interval: 30
+      voice: no
+    - name: Final call
+      interval: 120
+      voice: yes
