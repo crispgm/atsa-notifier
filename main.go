@@ -2,10 +2,10 @@
 package main
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
-	"net/http"
+
+	"github.com/crispgm/atsa-notifier/internal/provider"
 )
 
 // WebhookMessage represents the structure of the message to send to the Discord webhook
@@ -21,7 +21,7 @@ func main() {
 	userID := "674619029415264334"
 
 	// Create the message content with mention
-	message := WebhookMessage{
+	msg := WebhookMessage{
 		Content: fmt.Sprintf(
 			`[Announcement]
 %s <@%s> 🆚 Harrod HO
@@ -34,19 +34,19 @@ func main() {
 		),
 	}
 
-	jsonData, err := json.Marshal(message)
+	content, err := json.Marshal(msg)
 	if err != nil {
 		fmt.Println("Error marshaling JSON:", err)
 		return
 	}
 
 	// Send POST request to the Discord webhook
-	resp, err := http.Post(webhookURL, "application/json", bytes.NewBuffer(jsonData))
+	discord := provider.DiscordWebhook{}
+	resp, err := discord.Send(webhookURL, content)
 	if err != nil {
 		fmt.Println("Error sending POST request:", err)
 		return
 	}
-	defer resp.Body.Close()
 
 	// Check the response status
 	// if resp.StatusCode != http.StatusOK {
@@ -54,5 +54,5 @@ func main() {
 	// 	return
 	// }
 
-	fmt.Println("Message sent successfully!")
+	fmt.Println("Message sent successfully!", resp.StatusCode)
 }
