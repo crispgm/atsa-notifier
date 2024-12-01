@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-var _ DiscordWebhook
+var _ MessageProvider = (*DiscordWebhook)(nil)
 
 // DiscordWebhook .
 type DiscordWebhook struct{}

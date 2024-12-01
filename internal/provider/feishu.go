@@ -7,7 +7,7 @@ import (
 	"github.com/go-lark/lark"
 )
 
-var _ FeishuWebhook
+var _ MessageProvider = (*FeishuWebhook)(nil)
 
 // FeishuWebhook .
 type FeishuWebhook struct{}

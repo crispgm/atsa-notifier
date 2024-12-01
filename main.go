@@ -5,7 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/crispgm/atsa-notifier/internal/message"
 	"github.com/crispgm/atsa-notifier/internal/provider"
+	"github.com/crispgm/atsa-notifier/pkg/atsa"
 )
 
 // WebhookMessage represents the structure of the message to send to the Discord webhook
@@ -14,26 +16,30 @@ type WebhookMessage struct {
 }
 
 func main() {
-	// Replace with your Discord webhook URL
+	// Load tournament info
 	webhookURL := "https://discord.com/api/webhooks/1311930779034714156/fKxhXxEVSGi7J-kp5rf8FrmUiF8XoylmSS-BreVujFp9dOAM0xrZrdgPsODR6UeCNnvj"
-
-	// Replace with the user's ID you want to mention
-	userID := "674619029415264334"
-
-	// Create the message content with mention
-	msg := WebhookMessage{
-		Content: fmt.Sprintf(
-			`[Announcement]
-%s <@%s> 🆚 Harrod HO
-%s %s at Table %d`,
-			"David Zhang",
-			userID,
-			"Open Single", // Event
-			"Qualification",
-			3, // Table
-		),
+	tournamentName := "ATSA50 YangShengCup"
+	eventName := "Open Single"
+	eventPhase := "Qualification"
+	tableNo := "3"
+	team1 := []atsa.Player{
+		{
+			FirstName:     "David",
+			LastName:      "Zhang",
+			DiscordUserID: "674619029415264334",
+		},
 	}
-
+	team2 := []atsa.Player{
+		{
+			FirstName: "Harrod",
+			LastName:  "HO",
+		},
+	}
+	// Create the message content with mention
+	discordBuilder := message.DiscordBuilder{}
+	msg := WebhookMessage{
+		Content: discordBuilder.Build(webhookURL, tournamentName, eventName, eventPhase, tableNo, team1, team2),
+	}
 	content, err := json.Marshal(msg)
 	if err != nil {
 		fmt.Println("Error marshaling JSON:", err)
@@ -42,17 +48,10 @@ func main() {
 
 	// Send POST request to the Discord webhook
 	discord := provider.DiscordWebhook{}
-	resp, err := discord.Send(webhookURL, content)
+	_, err = discord.Send(webhookURL, content)
 	if err != nil {
-		fmt.Println("Error sending POST request:", err)
-		return
+		panic(err)
 	}
 
-	// Check the response status
-	// if resp.StatusCode != http.StatusOK {
-	// 	fmt.Println("Failed to send message, status code:", resp.StatusCode)
-	// 	return
-	// }
-
-	fmt.Println("Message sent successfully!", resp.StatusCode)
+	fmt.Println("Message sent successfully!")
 }
