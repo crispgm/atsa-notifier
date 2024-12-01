@@ -2,9 +2,9 @@
 
 ## Concepts
 
-- Discord Tournament Channel: Private channel created for each tournament. e.g. `HK-ATSA50-2024-12`
-- Discord Bot: Unified bot for all tournament channels.
-- Control Panel From ATSA Admin App: Trigger the bot.
+- Tournament Channel: Private channel created for each tournament. e.g. `HK-ATSA50-2024-12`
+- Tournament Bot: Unified bot for all tournament channels.
+- Control Panel: Trigger the bot.
 - Notification Providers:
     - Feishu: for tournaments in China
     - Discord: for tournaments in rest of world
@@ -46,7 +46,8 @@ New fields needed in Player's Profile:
 ## Techs
 
 ### Deployment
-- Production: Google Cloud
+
+ATSA Notifier runs locally.
 
 ### SDK
 
