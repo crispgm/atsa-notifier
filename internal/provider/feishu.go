@@ -1,6 +1,7 @@
 package provider
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -13,10 +14,15 @@ var _ MessageProvider = (*FeishuWebhook)(nil)
 type FeishuWebhook struct{}
 
 // Send .
-func (fw FeishuWebhook) Send(webhookURL string, content []byte) (*http.Response, error) {
+func (fw FeishuWebhook) Send(webhookURL string, msg *WebhookMessage) (*http.Response, error) {
+	content, err := json.Marshal(msg)
+	if err != nil {
+		fmt.Println("Error marshaling JSON:", err)
+		return nil, err
+	}
 	webhook := lark.NewNotificationBot(webhookURL)
-	msg := lark.NewMsgBuffer(lark.MsgPost).Text(string(content))
-	resp, err := webhook.PostNotificationV2(msg.Build())
+	mb := lark.NewMsgBuffer(lark.MsgPost).Text(string(content))
+	resp, err := webhook.PostNotificationV2(mb.Build())
 	if err != nil {
 		fmt.Println("Error sending POST request:", err)
 		return nil, err
