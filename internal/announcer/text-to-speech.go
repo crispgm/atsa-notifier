@@ -2,6 +2,8 @@
 package announcer
 
 import (
+	"fmt"
+
 	"github.com/hegedustibor/htgo-tts"
 	"github.com/hegedustibor/htgo-tts/handlers"
 )
@@ -9,7 +11,7 @@ import (
 // TextToSpeech .
 func TextToSpeech(text string, language string) error {
 	speech := htgotts.Speech{
-		Folder:   "/tmp/audio",
+		Folder:   fmt.Sprintf("/tmp/audio/%s", language),
 		Language: language,
 		Handler:  &handlers.Native{},
 	}

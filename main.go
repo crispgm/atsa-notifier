@@ -2,18 +2,14 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 
+	"github.com/crispgm/atsa-notifier/internal/announcer"
 	"github.com/crispgm/atsa-notifier/internal/message"
 	"github.com/crispgm/atsa-notifier/internal/provider"
 	"github.com/crispgm/atsa-notifier/pkg/atsa"
+	"github.com/hegedustibor/htgo-tts/voices"
 )
-
-// WebhookMessage represents the structure of the message to send to the Discord webhook
-type WebhookMessage struct {
-	Content string `json:"content"`
-}
 
 func main() {
 	// Load tournament info
@@ -35,23 +31,23 @@ func main() {
 			LastName:  "HO",
 		},
 	}
+
 	// Create the message content with mention
 	discordBuilder := message.DiscordBuilder{}
-	msg := WebhookMessage{
+	msg := &provider.WebhookMessage{
 		Content: discordBuilder.Build(webhookURL, tournamentName, eventName, eventPhase, tableNo, team1, team2),
 	}
-	content, err := json.Marshal(msg)
-	if err != nil {
-		fmt.Println("Error marshaling JSON:", err)
-		return
-	}
-
 	// Send POST request to the Discord webhook
 	discord := provider.DiscordWebhook{}
-	_, err = discord.Send(webhookURL, content)
+	_, err := discord.Send(webhookURL, msg)
 	if err != nil {
 		panic(err)
 	}
+
+	// Create text message for speech
+	ab := message.AnnouncementBuilder{}
+	announcement := ab.Build("", tournamentName, eventName, eventPhase, tableNo, team1, team2)
+	announcer.TextToSpeech(announcement, voices.English)
 
 	fmt.Println("Message sent successfully!")
 }
