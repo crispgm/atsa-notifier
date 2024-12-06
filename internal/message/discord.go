@@ -36,7 +36,7 @@ func (b DiscordBuilder) Build(url, tName, eName, ePhase, tableNo string, team1 [
 		eName,
 		ePhase,
 		tableNo,
-		strings.Join(t1, " "),
-		strings.Join(t2, " "),
+		strings.Join(t1, " & "),
+		strings.Join(t2, " & "),
 	)
 }
