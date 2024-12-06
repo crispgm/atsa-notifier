@@ -22,7 +22,7 @@ func NewScraper() *Scraper {
 }
 
 // Scrape .
-func (s *Scraper) Scrape(url string) (*Match, error) {
+func (s *Scraper) Scrape(url string) (*[]Match, error) {
 	var matches []Match
 	c := colly.NewCollector()
 	c.OnHTML("div.live-match-row", func(e *colly.HTMLElement) {
@@ -45,7 +45,7 @@ func (s *Scraper) Scrape(url string) (*Match, error) {
 	})
 	c.Visit(url)
 
-	return nil, nil
+	return &matches, nil
 }
 
 func splitNames(text string) []string {
