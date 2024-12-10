@@ -1,3 +1,8 @@
+locales:
+  - en-US
+  - zh-CN
+atsa_database:
+  default_path: ./data/players.csv
 match:
   batches:
     - name: First Call
