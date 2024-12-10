@@ -3,8 +3,10 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
+	"github.com/crispgm/atsa-notifier/internal/conf"
 	"github.com/crispgm/atsa-notifier/internal/message"
 	"github.com/crispgm/atsa-notifier/internal/provider"
 	"github.com/crispgm/atsa-notifier/internal/scraper"
@@ -12,6 +14,23 @@ import (
 )
 
 func main() {
+	args := os.Args
+	path := ""
+	if len(args) < 2 {
+		path = "./conf/conf.yml"
+	}
+	// Init
+	cfg, err := conf.LoadConf(path)
+	if err != nil {
+		panic(err)
+	}
+	// Load players
+	dbpath := cfg.ATSADB.DefaultPath
+	players, err := conf.LoadPlayerLocalDB(dbpath)
+	if err != nil {
+		panic(err)
+	}
+	playerDB := atsa.NewPlayerDB(players)
 	// Load tournament info
 	liveURL := "https://live.kickertool.de/crispfoosball/tournaments/IiGr5-u1QMG3sXbzLrXEt/live"
 	webhookURL := "https://discord.com/api/webhooks/1311930779034714156/fKxhXxEVSGi7J-kp5rf8FrmUiF8XoylmSS-BreVujFp9dOAM0xrZrdgPsODR6UeCNnvj"
@@ -32,10 +51,24 @@ func main() {
 		for _, match := range *matches {
 			var team1, team2 []atsa.Player
 			for _, player := range match.Team1 {
-				team1 = append(team1, convertPlayer(player))
+				p := playerDB.FindPlayers(player)
+				var pName = player
+				if len(p) == 1 {
+					pName = p[0].FullName
+				} else {
+					fmt.Println("cannot find", player)
+				}
+				team1 = append(team1, convertPlayer(pName))
 			}
 			for _, player := range match.Team2 {
-				team2 = append(team2, convertPlayer(player))
+				p := playerDB.FindPlayers(player)
+				var pName = player
+				if len(p) == 1 {
+					pName = p[0].FullName
+				} else {
+					fmt.Println("cannot find", player)
+				}
+				team2 = append(team2, convertPlayer(pName))
 			}
 			// Create the message content with mention
 			msg := &provider.WebhookMessage{

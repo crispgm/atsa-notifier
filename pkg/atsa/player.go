@@ -3,14 +3,20 @@ package atsa
 
 // Player an ATSA player
 type Player struct {
-	ID         string
-	FirstName  string
-	LastName   string
-	NativeName string
-	Code       string
-	Gender     string
-	Birthday   string
-	ProfilePic string
+	FullName    string
+	Name        string
+	ID          string
+	NativeName  string
+	FirstName   string
+	LastName    string
+	Gender      string
+	ITSFNumber  string
+	CountryCode string
+	CountryFlag string
+	ProfilePic  string
+	TourLog     string
+	QRCode      string
+	ProPic      string
 
 	DiscordUserID string
 	FeishuUserID  string
