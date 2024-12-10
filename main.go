@@ -26,7 +26,7 @@ func main() {
 	}
 	// Load players
 	dbpath := cfg.ATSADB.DefaultPath
-	players, err := conf.LoadPlayerLocalDB(dbpath)
+	players, err := conf.LoadPlayerFromLocalDB(dbpath)
 	if err != nil {
 		panic(err)
 	}
