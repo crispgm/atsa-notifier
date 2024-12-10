@@ -2,12 +2,13 @@
 
 ## Concepts
 
-- Tournament Channel: Private channel created for each tournament. e.g. `HK-ATSA50-2024-12`
+- Tournament Channel: Private channel created for each tournament. e.g. `HK-ATSA50-2024-12`. For Feishu, a group will be created similarily.
 - Tournament Bot: Unified bot for all tournament channels.
-- Control Panel: Trigger the bot.
-- Notification Providers:
-    - Feishu: for tournaments in China
-    - Discord: for tournaments in rest of world
+- Control Panel: Setup and control the bot.
+- Announcements: Call players with voices.
+- Message Notifications:
+    - Feishu: for tournaments in China.
+    - Discord: for tournaments in rest of world.
 
 ## Features
 
@@ -19,7 +20,7 @@ New fields needed in Player's Profile:
 
 ### Match Notifications
 
-- Three batches notification, if not ACK yet, then `Start Voice Call`.
+- Three batches notification.
 - For Feishu, Buzz at the 1st time, Buzz with text message at the 2nd time, and finally Buzz with phone call.
 
 ```plain
@@ -41,18 +42,25 @@ New fields needed in Player's Profile:
     Open Double Qualification at Table 3
 ```
 
-### Commands
+### Announcement
 
-## Techs
+Make announcements via Web Speech API.
+
+## Dev
 
 ### Deployment
 
 ATSA Notifier runs locally.
 
+Run:
+```shell
+go run cmd/atsa-notifier/main.go
+```
+
 ### SDK
 
 - Discord Bot
-    - Doc https://discord.com/developers/docs/intro
-    - SDK https://github.com/bwmarrin/discordgo
+    - Doc <https://discord.com/developers/docs/intro>
+    - SDK <https://github.com/bwmarrin/discordgo>
 - Feishu Bot
-    - Doc https://open.feishu.cn/
+    - Doc <https://open.feishu.cn/>

@@ -1,16 +1,10 @@
-locales:
-  - en-US
-  - zh-CN
+port: :8080
 atsa_database:
   default_path: ./data/players.csv
-match:
-  batches:
-    - name: First Call
-      interval: 0
-      voice: no
-    - name: Second Call
-      interval: 30
-      voice: no
-    - name: Final call
-      interval: 120
-      voice: yes
+templates:
+  enUS:
+    normal_speak: "%s %s %s %s versus %s at table %s"
+    normal_text: "%s\n%s %s\n%s 🆚 %s at Table %s"
+  zhCN:
+    normal_speak: "%s\n%s%s\n%s对阵%s，球桌%s"
+    normal_text: "%s\n%s%s\n%s 🆚 %s\n球桌 %s"

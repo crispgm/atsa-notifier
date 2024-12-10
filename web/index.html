@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/img/favicon.jpg" type="image/jpeg" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <title>ATSA Notifier - Portal</title>
+  </head>
+  <body>
+    <div class="wrapper">
+      <main id="app">
+        <nav class="header">
+          <h1>ATSA Notifier</h1>
+        </nav>
+        <div class="main-panel">
+          <div id="setup" class="panel">
+            <h2>Setup</h2>
+            <h5>Tournament Name</h5>
+            <div class="panel-item">
+              <input
+                type="text"
+                name="tName"
+                placeholder="Tournament Name"
+                v-model="tournamentName"
+              />
+            </div>
+            <h5>Event Name</h5>
+            <div class="panel-item">
+              <input
+                type="text"
+                name="eName"
+                placeholder="Event Name: e.g. Open Double"
+                v-model="eventName"
+              />
+            </div>
+            <h5>Event Phase</h5>
+            <div class="panel-item">
+              <input
+                type="text"
+                name="ePhase"
+                placeholder="Event Phase: e.g. Qualification"
+                v-model="eventPhase"
+              />
+            </div>
+            <h5>Kickertool Live URL</h5>
+            <div class="panel-item">
+              <input
+                type="text"
+                name="eURL"
+                placeholder="Event URL from Kickertool"
+                v-model="kickertoolLiveURL"
+              />
+            </div>
+            <h5>Discord Webhook URL</h5>
+            <div class="panel-item">
+              <input
+                type="text"
+                name="discordURL"
+                placeholder="Webhook URL from Discord"
+                v-model="discordWebhookURL"
+              />
+            </div>
+            <h5>Final Texts</h5>
+            <div class="panel-item">
+              <textarea
+                v-model="text"
+                placeholder="Type something to speak..."
+              ></textarea>
+            </div>
+            <h5>Locale</h5>
+            <div class="panel-item">
+              <select v-model="selectedLocale">
+                <option
+                  v-for="locale in locales"
+                  :key="locale"
+                  :value="locale"
+                >
+                  {{ locale }}
+                </option>
+              </select>
+            </div>
+            <h5>Speech Synthesizer</h5>
+            <div class="panel-item">
+              <select v-model="selectedVoice">
+                <option
+                  v-for="voice in voices"
+                  :key="voice.name"
+                  :value="voice.name"
+                >
+                  {{ voice.name }} ({{ voice.lang }})
+                </option>
+              </select>
+            </div>
+            <div class="panel-item">
+              <p>
+                <button @click="speakText">Speak</button>&nbsp;
+                <button @click="notifyText">Notify</button>
+              </p>
+            </div>
+          </div>
+          <div id="control" class="panel">
+            <h2>Control Panel</h2>
+            <p>
+              <span><button @click="crawl">Crawl</button></span>
+              <span>{{ loadingError }}</span>
+            </p>
+            <div class="matches">
+              <div class="match" v-for="(match, index) in matches">
+                <div class="match-table">{{ match.tableNo }}</div>
+                <div class="match-team match-host">{{ match.team1.join(' & ') }}</div>
+                <div class="match-team match-away">{{ match.team2.join(' & ') }}</div>
+                <div class="match-ops">
+                  <button @click="call(index)">S</button>&nbsp;
+                  <button @click="edit(index)">E</button>&nbsp;
+                  <button @click="notify(index)">N</button>&nbsp;
+                  <!-- <button @click="buzz">!</button> -->
+                </div>
+              </div>
+            </div>
+            </div>
+          </div>
+          <!-- <div id="logs" class="panel"> -->
+          <!--   <h2>Logs</h2> -->
+          <!-- </div> -->
+        </div>
+      </main>
+      <footer>
+        Copyright &copy; <a href="https://asiatablesoccer.org/">ATSA</a>, 2024.
+      </footer>
+    </div>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="/js/app.js"></script>
+  </body>
+</html>

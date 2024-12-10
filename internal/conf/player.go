@@ -8,8 +8,8 @@ import (
 	"github.com/crispgm/atsa-notifier/pkg/atsa"
 )
 
-// LoadPlayerLocalDB .
-func LoadPlayerLocalDB(path string) ([]atsa.Player, error) {
+// LoadPlayerFromLocalDB .
+func LoadPlayerFromLocalDB(path string) ([]atsa.Player, error) {
 	var players []atsa.Player
 	var err error
 

@@ -9,8 +9,15 @@ import (
 
 // Conf .
 type Conf struct {
-	Locales []string     `yaml:"locales"`
-	ATSADB  ATSADatabase `yaml:"atsa_database"`
+	Port      string              `yaml:"port"`
+	Templates map[string]Template `yaml:"templates"`
+	ATSADB    ATSADatabase        `yaml:"atsa_database"`
+}
+
+// Template .
+type Template struct {
+	NormalSpeak string `yaml:"normal_speak"`
+	NormalText  string `yaml:"normal_text"`
 }
 
 // ATSADatabase .
