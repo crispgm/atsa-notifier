@@ -53,20 +53,21 @@ func buildMessage(
 		params.Locale = "en-US"
 	}
 	var msg string
+	var err error
 	if template, ok := template[params.Locale]; ok {
 		speakBuilder := message.Speak{}
 		discordBuilder := message.Discord{}
 		if msgType == "speak" {
 			if templateName == "call_match" {
-				msg = speakBuilder.CallMatch(&template, params.TournamentName, params.EventName, params.EventPhase, params.TableNo, team1, team2)
+				msg, err = speakBuilder.CallMatch(&template, params.TournamentName, params.EventName, params.EventPhase, params.TableNo, team1, team2)
 			} else if templateName == "recall_player" {
-				msg = speakBuilder.RecallPlayer(&template, params.TournamentName, params.EventName, params.EventPhase, params.TableNo, team1[0])
+				msg, err = speakBuilder.RecallPlayer(&template, params.TournamentName, params.EventName, params.EventPhase, params.TableNo, team1[0])
 			}
 		} else if msgType == "discord" {
 			if templateName == "call_match" {
-				msg = discordBuilder.CallMatch(&template, params.TournamentName, params.EventName, params.EventPhase, params.TableNo, team1, team2)
+				msg, err = discordBuilder.CallMatch(&template, params.TournamentName, params.EventName, params.EventPhase, params.TableNo, team1, team2)
 			} else if templateName == "recall_player" {
-				msg = discordBuilder.RecallPlayer(&template, params.TournamentName, params.EventName, params.EventPhase, params.TableNo, team1[0])
+				msg, err = discordBuilder.RecallPlayer(&template, params.TournamentName, params.EventName, params.EventPhase, params.TableNo, team1[0])
 			}
 		} else if msgType == "feishu" {
 			if templateName == "call_match" {
@@ -77,6 +78,10 @@ func buildMessage(
 		}
 	} else {
 		ErrorResponse(c, CodeLoadTemplate, fmt.Sprintf("[%s] template not found", params.Locale), nil)
+		return ""
+	}
+	if err != nil {
+		ErrorResponse(c, CodeLoadTemplate, err.Error(), nil)
 		return ""
 	}
 	return strings.TrimSpace(msg)

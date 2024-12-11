@@ -16,6 +16,7 @@ type Conf struct {
 
 // Template .
 type Template struct {
+	And         string `yaml:"and"`
 	NormalSpeak string `yaml:"normal_speak"`
 	NormalText  string `yaml:"normal_text"`
 	RecallSpeak string `yaml:"recall_speak"`
