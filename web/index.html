@@ -72,7 +72,7 @@
             </div>
             <h5>Locale</h5>
             <div class="panel-item">
-              <select v-model="selectedLocale">
+              <select v-model="selectedLocale" @change="updateLocale">
                 <option v-for="locale in locales" :key="locale" :value="locale">
                   {{ locale }}
                 </option>
