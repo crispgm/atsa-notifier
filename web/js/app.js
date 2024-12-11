@@ -23,6 +23,7 @@ createApp({
       matches: [],
 
       // logs
+      logs: [],
     };
   },
   mounted() {
@@ -30,11 +31,23 @@ createApp({
     window.speechSynthesis.onvoiceschanged = this.loadVoices;
   },
   methods: {
+    showError(msg) {
+      this.loadingError = msg;
+      this.log('ERROR', msg)
+    },
+    log(level = 'INFO', ...messages) {
+      const timestamp = new Date().toLocaleTimeString();
+      const formattedMessages = messages.join(' ');
+      const fullLog = `[${timestamp}] [${level}] ${formattedMessages}`;
+      this.logs.unshift(fullLog);
+      console.log(fullLog);
+    },
     loadVoices() {
       this.voices = window.speechSynthesis.getVoices();
       if (this.voices.length > 0 && !this.selectedVoice) {
         this.selectedVoice = this.voices[0].name; // Select the first available voice
       }
+      this.log('INFO', 'Loaded', this.voices.length, 'voice synthesizers');
     },
     textToSpeech(text) {
       if (text) {
@@ -45,17 +58,18 @@ createApp({
         if (selected) {
           utterance.voice = selected;
         }
+        this.log('INFO', 'Spoke [' + text + '] with', utterance.voice.name);
         window.speechSynthesis.speak(utterance);
       }
     },
     speakText() {
       if (this.text) {
-        this.textToSpeech(this.text)
+        this.textToSpeech(this.text);
       }
     },
     async buildMatchText(index) {
       try {
-        this.loadingError = 'sending';
+        this.loadingError = 'Sending...';
         const url = '/notify';
         const match = this.matches[index];
         const params = {
@@ -75,16 +89,14 @@ createApp({
           body: JSON.stringify(params),
         });
         if (!response.ok) {
-          throw new Error(
-            'Network response was not ok: ' + response.statusText,
-          );
+          this.showError('Network response was not ok: ' + response.statusText);
         }
         this.loadingError = '';
         const data = await response.json();
         const text = data.data.text;
-        return text
+        return text;
       } catch (err) {
-        this.loadingError = err.message;
+        this.showError(err.message);
       } finally {
         this.loading = false;
       }
@@ -92,17 +104,19 @@ createApp({
     },
     async call(index) {
       this.textToSpeech(await this.buildMatchText(index));
+      this.log('INFO', 'Called match index:', index);
     },
     async edit(index) {
       this.text = await this.buildMatchText(index);
+      this.log('INFO', 'Edited match index:', index);
     },
     async notifyText() {
       if (!this.discordWebhookURL) {
         console.log('discordWebhookURL is not set');
-        return
+        return;
       }
       try {
-        this.loadingError = 'sending';
+        this.loadingError = 'Sending...';
         const url = '/notify';
         const params = {
           text: this.text,
@@ -116,24 +130,23 @@ createApp({
           body: JSON.stringify(params),
         });
         if (!response.ok) {
-          throw new Error(
-            'Network response was not ok: ' + response.statusText,
-          );
+          this.showError('Network response was not ok: ' + response.statusText);
         }
         this.loadingError = '';
       } catch (err) {
-        this.loadingError = err.message;
+        this.showError(err.message);
       } finally {
         this.loading = false;
       }
     },
     async notify(index) {
       if (!this.discordWebhookURL) {
-        console.log('discordWebhookURL is not set');
-        return
+        this.showError('discordWebhookURL is not set');
+        return;
       }
+      this.log('INFO', 'Notified match index:', index);
       try {
-        this.loadingError = 'sending';
+        this.loadingError = 'Sending...';
         const url = '/notify';
         const match = this.matches[index];
         const params = {
@@ -154,36 +167,33 @@ createApp({
           body: JSON.stringify(params),
         });
         if (!response.ok) {
-          throw new Error(
-            'Network response was not ok: ' + response.statusText,
-          );
+          this.showError('Network response was not ok: ' + response.statusText);
         }
         this.loadingError = '';
       } catch (err) {
-        this.loadingError = err.message;
+        this.showError(err.message);
       } finally {
         this.loading = false;
       }
     },
     async crawl() {
       if (!this.kickertoolLiveURL) {
-        console.log('kickertoolLiveURL is not set');
-        return
+        this.showError('kickertoolLiveURL is not set');
+        return;
       }
+      this.log('INFO', 'Crawled', this.kickertoolLiveURL);
       try {
-        this.loadingError = 'loading';
-        const url = "/crawl?url=" + this.kickertoolLiveURL;
+        this.loadingError = 'Loading...';
+        const url = '/crawl?url=' + this.kickertoolLiveURL;
         const response = await fetch(url);
         if (!response.ok) {
-          throw new Error(
-            'Network response was not ok: ' + response.statusText,
-          );
+          this.showError('Network response was not ok: ' + response.statusText);
         }
         const data = await response.json();
         this.matches = data.data.matches;
         this.loadingError = '';
       } catch (err) {
-        this.loadingError = err.message;
+        this.showError(err.message);
       } finally {
         this.loading = false;
       }

@@ -53,19 +53,20 @@ func buildMessage(
 	if params.Locale == "" {
 		params.Locale = "enUS"
 	}
+	var msg string
 	if template, ok := template[params.Locale]; ok {
 		if msgType == "discord" {
 			discordBuilder := message.DiscordBuilder{}
-			return discordBuilder.Build(&template, params.TournamentName, params.EventName, params.EventPhase, params.TableNo, team1, team2)
+			msg = discordBuilder.Build(&template, params.TournamentName, params.EventName, params.EventPhase, params.TableNo, team1, team2)
 		} else if msgType == "announcement" {
 			announcementBuilder := message.AnnouncementBuilder{}
-			return announcementBuilder.Build(&template, params.TournamentName, params.EventName, params.EventPhase, params.TableNo, team1, team2)
+			msg = announcementBuilder.Build(&template, params.TournamentName, params.EventName, params.EventPhase, params.TableNo, team1, team2)
 		}
 	} else {
 		ErrorResponse(c, CodeLoadTemplate, fmt.Sprintf("[%s] template not found", params.Locale), nil)
 		return ""
 	}
-	return ""
+	return strings.TrimSpace(msg)
 }
 
 func convertPlayer(fullName string) atsa.Player {
