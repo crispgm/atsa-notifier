@@ -52,6 +52,16 @@ createApp({
       }
       this.log('INFO', 'Loaded', this.voices.length, 'voice synthesizers');
     },
+    updateLocale() {
+      if (this.selectedLocale) {
+        for (i = 0; i < this.voices.length; i++) {
+          if (this.voices[i].name.startsWith('Google') && this.selectedLocale == this.voices[i].lang) {
+            this.selectedVoice = this.voices[i].name;
+            return;
+          }
+        }
+      }
+    },
     textToSpeech(text) {
       if (text) {
         const utterance = new SpeechSynthesisUtterance(text);
