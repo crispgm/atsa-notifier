@@ -5,15 +5,25 @@ templates:
   en-US:
     normal_speak: "%s %s %s %s versus %s at table %s"
     normal_text: "%s\n%s %s\n%s 🆚 %s at Table %s"
+    recall_speak: "%s Please play at table %s"
+    recall_text: "%s Please play at table %s"
   zh-CN:
     normal_speak: "%s\n%s%s\n%s 对阵 %s 在%s号球桌"
     normal_text: "%s\n%s%s\n%s 🆚 %s\n球桌 %s"
+    recall_speak: "%s 请速度前往%s号球桌比赛"
+    recall_text: "%s 请速度前往%s号球桌比赛"
   zh-HK:
     normal_speak: "%s\n%s%s\n%s 對 %s 在第%s桌"
     normal_text: "%s\n%s%s\n%s 🆚 %s\n球桌 %s"
+    recall_speak: "%s 請速度前往第%s號球桌比賽"
+    recall_text: "%s 請速度前往第%s號球桌比賽"
   zh-TW:
     normal_speak: "%s\n%s%s\n%s 對 %s 在第%s桌"
     normal_text: "%s\n%s%s\n%s 🆚 %s\n球桌 %s"
+    recall_speak: "%s 請速度前往第%s號球桌比賽"
+    recall_text: "%s 請速度前往第%s號球桌比賽"
   ja-JP:
     normal_speak: "%s\n%s%s\n%s 対 %s テーブル %s"
     normal_text: "%s\n%s%s\n%s 🆚 %s\nテーブル %s"
+    recall_speak: "%s、テーブル%sに急いで試合に行ってください"
+    recall_text: "%s、テーブル%sに急いで試合に行ってください"
