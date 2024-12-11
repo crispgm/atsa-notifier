@@ -49,9 +49,14 @@ func (s *Scraper) Scrape(url string) (*[]Match, error) {
 }
 
 func splitNames(text string) []string {
-	names := strings.Split(text, "/")
-	names[0] = strings.Trim(names[0], " \t\n")
-	names[1] = strings.Trim(names[1], " \t\n")
+	var names []string
+	if strings.Contains(text, "/") {
+		names = strings.Split(text, "/")
+		names[0] = strings.TrimSpace(names[0])
+		names[1] = strings.TrimSpace(names[1])
+	} else {
+		names = append(names, text)
+	}
 	return names
 }
 
