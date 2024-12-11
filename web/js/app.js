@@ -131,7 +131,7 @@ createApp({
     },
     async recall(mIndex, tIndex, pIndex) {
       this.textToSpeech(await this.buildMatchText('speak', 'recall_player', mIndex, tIndex, pIndex));
-      this.log('INFO', 'Called match index:', mIndex, tIndex, pIndex);
+      this.log('INFO', 'Recalled player index:', mIndex, tIndex, pIndex);
     },
     speakText() {
       if (this.text) {

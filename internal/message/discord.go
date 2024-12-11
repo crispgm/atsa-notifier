@@ -14,7 +14,7 @@ var _ Builder = (*Discord)(nil)
 type Discord struct{}
 
 // CallMatch .
-func (b Discord) CallMatch(template *conf.Template, tName, eName, ePhase, tableNo string, team1 []atsa.Player, team2 []atsa.Player) string {
+func (b Discord) CallMatch(template *conf.Template, tName, eName, ePhase, tableNo string, team1 []atsa.Player, team2 []atsa.Player) (string, error) {
 	var t1, t2 []string
 	for _, t := range team1 {
 		t1 = append(t1, t.Name)
@@ -28,22 +28,24 @@ func (b Discord) CallMatch(template *conf.Template, tName, eName, ePhase, tableN
 			t2 = append(t2, fmt.Sprintf("<@%s>", t.DiscordUserID))
 		}
 	}
-	return fmt.Sprintf(
-		template.NormalText,
-		tName,
-		eName,
-		ePhase,
-		strings.Join(t1, " & "),
-		strings.Join(t2, " & "),
-		tableNo,
-	)
+	data := map[string]interface{}{
+		"TournamentName": tName,
+		"EventName":      eName,
+		"EventPhase":     ePhase,
+		"Team1":          strings.Join(t1, template.And),
+		"Team2":          strings.Join(t2, template.And),
+		"TableNo":        tableNo,
+	}
+	output, err := EvaluateTemplate("discord_call_match", template.NormalText, data)
+	return output, err
 }
 
 // RecallPlayer .
-func (b Discord) RecallPlayer(template *conf.Template, tName, eName, ePhase, tableNo string, player atsa.Player) string {
-	return fmt.Sprintf(
-		template.RecallText,
-		player.Name,
-		tableNo,
-	)
+func (b Discord) RecallPlayer(template *conf.Template, tName, eName, ePhase, tableNo string, player atsa.Player) (string, error) {
+	data := map[string]interface{}{
+		"Player":  player.Name,
+		"TableNo": tableNo,
+	}
+	output, err := EvaluateTemplate("discord_recall_player", template.RecallText, data)
+	return output, err
 }
