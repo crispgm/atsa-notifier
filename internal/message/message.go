@@ -8,12 +8,21 @@ import (
 
 // Builder interface for Message Builder
 type Builder interface {
-	Build(
+	CallMatch(
 		template *conf.Template,
 		tName string,
-		eName, ePhase string,
+		eName string,
+		ePhase string,
 		tableNo string,
 		team1 []atsa.Player,
 		team2 []atsa.Player,
+	) string
+	RecallPlayer(
+		template *conf.Template,
+		tName string,
+		eName string,
+		ePhase string,
+		tableNo string,
+		player atsa.Player,
 	) string
 }

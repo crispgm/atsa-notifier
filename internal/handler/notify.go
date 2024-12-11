@@ -15,7 +15,9 @@ type NotifyParams struct {
 	TableNo        string   `json:"tableNo"`
 	Locale         string   `json:"locale"`
 
-	Text string `json:"text"`
+	MsgType  string `json:"msgType"`  // speak, discord, feishu
+	Template string `json:"template"` // e.g. call_match, recall_player or text; text is given by user manually
+	Text     string `json:"text"`
 
 	DiscordWebhookURL string `json:"discordWebhookURL"`
 	FeishuWebhookURL  string `json:"feishuWebhookURL"`
@@ -23,8 +25,9 @@ type NotifyParams struct {
 
 // NotifyOutput .
 type NotifyOutput struct {
-	MsgType string `json:"msgType"`
-	Text    string `json:"text"`
+	MsgType  string `json:"msgType"`
+	Template string `json:"template"`
+	Text     string `json:"text"`
 }
 
 // NotifyHandler serves the main page.
@@ -36,38 +39,46 @@ func NotifyHandler(c *gin.Context) {
 		return
 	}
 
-	var msgType string
-	if len(params.DiscordWebhookURL) > 0 {
-		msgType = "discord"
-	} else if len(params.FeishuWebhookURL) > 0 {
-		msgType = "feishu"
-	} else if len(params.Text) > 0 {
-		msgType = "text"
+	if params.MsgType == "discord" {
+		if len(params.DiscordWebhookURL) == 0 {
+			ErrorResponse(c, CodeParamsErr, "discordWebhookURL is not set", nil)
+			return
+		}
+	} else if params.MsgType == "feishu" {
+		if len(params.FeishuWebhookURL) == 0 {
+			ErrorResponse(c, CodeParamsErr, "feishuWebhookURL is not set", nil)
+			return
+		}
 	} else {
-		msgType = "announcement"
+		params.MsgType = "speak"
 	}
 
 	var msg provider.WebhookMessage
 	if len(params.Text) > 0 {
 		msg.Content = params.Text
 	} else {
-		msg.Content = buildMessage(c, &params, msgType)
+		if !(params.Template == "call_match" || params.Template == "recall_player") {
+			ErrorResponse(c, CodeParamsErr, "Template is not existed", nil)
+			return
+		}
+		msg.Content = buildMessage(c, &params, params.MsgType, params.Template)
 	}
 
 	var output NotifyOutput
-	output.MsgType = msgType
+	output.MsgType = params.MsgType
+	output.Template = params.Template
 	output.Text = msg.Content
 	// Send POST request to the Discord webhook
-	if msgType == "discord" {
+	if output.MsgType == "discord" {
 		discordSender := provider.DiscordWebhook{}
 		_, err = discordSender.Send(params.DiscordWebhookURL, &msg)
 		if err != nil {
 			ErrorResponse(c, CodeParamsErr, err.Error(), nil)
 			return
 		}
-	} else if msgType == "feishu" {
+	} else if output.MsgType == "feishu" {
 		// do nothing rn
-	} else if msgType == "announcement" {
+	} else if output.MsgType == "speak" {
 		// do nothing rn
 	}
 

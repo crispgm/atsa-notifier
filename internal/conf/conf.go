@@ -18,6 +18,8 @@ type Conf struct {
 type Template struct {
 	NormalSpeak string `yaml:"normal_speak"`
 	NormalText  string `yaml:"normal_text"`
+	RecallSpeak string `yaml:"recall_speak"`
+	RecallText  string `yaml:"recall_text"`
 }
 
 // ATSADatabase .
