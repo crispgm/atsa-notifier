@@ -2,9 +2,18 @@ port: :8080
 atsa_database:
   default_path: ./data/players.csv
 templates:
-  enUS:
+  en-US:
     normal_speak: "%s %s %s %s versus %s at table %s"
     normal_text: "%s\n%s %s\n%s 🆚 %s at Table %s"
-  zhCN:
-    normal_speak: "%s\n%s%s\n%s 对阵 %s 球桌%s"
+  zh-CN:
+    normal_speak: "%s\n%s%s\n%s 对阵 %s 在%s号球桌"
     normal_text: "%s\n%s%s\n%s 🆚 %s\n球桌 %s"
+  zh-HK:
+    normal_speak: "%s\n%s%s\n%s 對 %s 在第%s桌"
+    normal_text: "%s\n%s%s\n%s 🆚 %s\n球桌 %s"
+  zh-TW:
+    normal_speak: "%s\n%s%s\n%s 對 %s 在第%s桌"
+    normal_text: "%s\n%s%s\n%s 🆚 %s\n球桌 %s"
+  ja-JP:
+    normal_speak: "%s\n%s%s\n%s 対 %s テーブル %s"
+    normal_text: "%s\n%s%s\n%s 🆚 %s\nテーブル %s"

@@ -171,6 +171,9 @@
             </div>
             <div class="control-logs">
               <h2>Logs</h2>
+              <p>
+                <button @click="clear">Clear</button>
+              </p>
               <div class="logs">
                 <div class="log-item" v-for="log in logs">{{ log }}</div>
               </div>
