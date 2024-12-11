@@ -51,7 +51,7 @@ func buildMessage(
 		return ""
 	}
 	if params.Locale == "" {
-		params.Locale = "enUS"
+		params.Locale = "en-US"
 	}
 	var msg string
 	if template, ok := template[params.Locale]; ok {

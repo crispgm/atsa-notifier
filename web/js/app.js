@@ -9,8 +9,8 @@ createApp({
       eventPhase: '',
       kickertoolLiveURL: '',
       discordWebhookURL: '',
-      locales: ['enUS', 'zhCN'],
-      selectedLocale: 'enUS',
+      locales: ['en-US', 'zh-CN', 'zh-HK', 'zh-TW', 'ja-JP'],
+      selectedLocale: 'en-US',
 
       // voices
       text: '',
@@ -42,6 +42,9 @@ createApp({
       this.logs.unshift(fullLog);
       console.log(fullLog);
     },
+    clear() {
+      this.logs = [];
+    },
     loadVoices() {
       this.voices = window.speechSynthesis.getVoices();
       if (this.voices.length > 0 && !this.selectedVoice) {
@@ -60,11 +63,6 @@ createApp({
         }
         this.log('INFO', 'Spoke [' + text + '] with', utterance.voice.name);
         window.speechSynthesis.speak(utterance);
-      }
-    },
-    speakText() {
-      if (this.text) {
-        this.textToSpeech(this.text);
       }
     },
     async buildMatchText(index) {
@@ -110,9 +108,16 @@ createApp({
       this.text = await this.buildMatchText(index);
       this.log('INFO', 'Edited match index:', index);
     },
+    speakText() {
+      if (this.text) {
+        this.textToSpeech(this.text);
+      } else {
+        this.showError('Please input texts manually.')
+      }
+    },
     async notifyText() {
       if (!this.discordWebhookURL) {
-        console.log('discordWebhookURL is not set');
+        this.showError('discordWebhookURL is not set');
         return;
       }
       try {
