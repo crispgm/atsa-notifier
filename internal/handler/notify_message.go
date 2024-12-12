@@ -26,21 +26,21 @@ func buildMessage(
 
 	var team1, team2 []atsa.Player
 	for _, player := range params.Team1 {
-		p := playerDB.FindPlayersByFullName(player)
-		if len(p) == 1 {
-			team1 = append(team1, p[0])
+		p := playerDB.FindPlayer(player)
+		if p != nil {
+			team1 = append(team1, *p)
 		} else {
 			team1 = append(team1, convertPlayer(player))
-			fmt.Println("no or multiple players found", player)
+			fmt.Println("no players found", player)
 		}
 	}
 	for _, player := range params.Team2 {
-		p := playerDB.FindPlayersByFullName(player)
-		if len(p) == 1 {
-			team2 = append(team2, p[0])
+		p := playerDB.FindPlayer(player)
+		if p != nil {
+			team2 = append(team2, *p)
 		} else {
 			team2 = append(team2, convertPlayer(player))
-			fmt.Println("no or multiple players found", player)
+			fmt.Println("no players found", player)
 		}
 	}
 	// Create the message content with mention

@@ -164,6 +164,7 @@ footer {
 }
 
 .matches {
+  font-family: 'Fira Code', Menlo, Monaco, monospace;
   border-radius: 6px;
   border: 1px solid #ced4da;
   min-height: 24rem;
@@ -221,6 +222,14 @@ footer {
   width: 34rem;
 }
 
+.match-player-id {
+  border-radius: 4px;
+  background-color: #ced4da;
+  font-size: 0.8rem;
+  padding: 4px 8px;
+  margin: 0 4px 0 0;
+}
+
 .match-player {
   flex: 1 1 16rem;
   min-width: 14rem;
@@ -235,7 +244,6 @@ footer {
 
 .match-player-name {
   overflow: scroll;
-  text-overflow: ellipsis;
   white-space: nowrap;
   flex-grow: 1;
 }

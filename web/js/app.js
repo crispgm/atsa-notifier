@@ -158,11 +158,11 @@ createApp({
         const data = await response.json();
         this.log(
           'INFO',
-          'Notified match provider: ',
+          'Notified match provider:',
           provider,
           'template:',
           template,
-          ' text:',
+          'text:',
           data.data.text,
         );
       } catch (err) {
@@ -171,9 +171,15 @@ createApp({
         this.loading = false;
       }
     },
+    currentMatch(index) {
+      const match = JSON.parse(JSON.stringify(this.matches[index]));
+      match.team1 = match.team1.map(player => player.id);
+      match.team2 = match.team2.map(player => player.id);
+      return match;
+    },
     async handleCall(index) {
       this.log('INFO', 'Called match index:', index);
-      const match = this.matches[index];
+      const match = this.currentMatch(index);
       // speak
       this.textToSpeech(
         await this.buildSpeakText(match, 'speak', 'call_match'),
@@ -189,17 +195,13 @@ createApp({
     },
     async handleEdit(index) {
       this.log('INFO', 'Edited match index:', index);
-      const match = this.matches[index];
+      const match = this.currentMatch(index);
       this.text = await this.buildSpeakText(match, 'speak', 'call_match');
     },
-    async handleRecall(mIndex, tIndex, pIndex) {
-      this.log('INFO', 'Recalled player index:', mIndex, tIndex, pIndex);
-      const match = JSON.parse(JSON.stringify(this.matches[mIndex]));
-      let team = match.team1;
-      if (tIndex == 1) {
-        team = match.team2;
-      }
-      match.team1 = [team[pIndex]];
+    async handleRecall(index, id) {
+      this.log('INFO', 'Recalled player ID:', id);
+      const match = JSON.parse(JSON.stringify(this.matches[index]));
+      match.team1 = [id];
       match.team2 = [];
       // speak
       this.textToSpeech(
@@ -219,11 +221,11 @@ createApp({
         this.log('INFO', 'Announced text:', this.text);
         this.textToSpeech(this.text);
         if (this.discordWebhookURL) {
-          this.log('INFO', 'Sended text to Discord:', this.text);
+          this.log('INFO', 'Sent text to Discord:', this.text);
           await this.notifyManually('discord', this.text);
         }
         if (this.feishuWebhookURL) {
-          this.log('INFO', 'Sended text to Feishu:', this.text);
+          this.log('INFO', 'Sent text to Feishu:', this.text);
           await this.notifyManually('feishu', this.text);
         }
       } else {
