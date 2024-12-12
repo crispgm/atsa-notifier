@@ -40,5 +40,10 @@ func main() {
 	r.POST("/notify", handler.NotifyHandler)
 
 	// Run the server
-	r.Run(":8080")
+	if len(cfg.Mode) > 0 {
+		gin.SetMode(cfg.Mode)
+	} else {
+		gin.SetMode(gin.ReleaseMode)
+	}
+	r.Run(cfg.Port)
 }

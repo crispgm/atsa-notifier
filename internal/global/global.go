@@ -17,7 +17,7 @@ func LoadGlobalData(cfg *conf.Conf) {
 	mu.Lock()
 	defer mu.Unlock()
 
-	dbpath := cfg.ATSADB.DefaultPath
+	dbpath := cfg.ATSADB.LocalPath
 	players, err := conf.LoadPlayerFromLocalDB(dbpath)
 	if err != nil {
 		panic(err)

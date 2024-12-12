@@ -1,6 +1,8 @@
 port: :8080
+mode: debug # should be `release` in production
 atsa_database:
-  default_path: ./data/players.csv
+  local_path: ./data/players.csv
+  web_url:
 templates:
   en-US:
     and: " & "
