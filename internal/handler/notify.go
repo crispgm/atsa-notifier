@@ -77,9 +77,14 @@ func NotifyHandler(c *gin.Context) {
 			return
 		}
 	} else if output.MsgType == "feishu" {
-		// do nothing rn
+		feishuSender := provider.FeishuWebhook{}
+		_, err = feishuSender.Send(params.FeishuWebhookURL, &msg)
+		if err != nil {
+			ErrorResponse(c, CodeParamsErr, err.Error(), nil)
+			return
+		}
 	} else if output.MsgType == "speak" {
-		// do nothing rn
+		// nothing needed to be done
 	}
 
 	SuccessResponse(c, output)
