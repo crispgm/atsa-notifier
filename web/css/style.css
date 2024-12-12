@@ -109,7 +109,7 @@ footer {
 }
 
 #control {
-  min-width: 85rem;
+  width: 85rem;
 }
 
 .panel {
@@ -156,7 +156,9 @@ footer {
   color: #ced4da;
   background-color: #212529;
   height: 18rem;
+  width: 100%;
   overflow: scroll;
+  overflow-wrap: break-word;
 }
 
 .log-item {
