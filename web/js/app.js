@@ -214,26 +214,38 @@ createApp({
         await this.notify(match, 'feishu', template);
       }
     },
-    handleSpeakText() {
+    async handleAnnounce() {
       if (this.text) {
+        this.log('INFO', 'Announced text:', this.text);
         this.textToSpeech(this.text);
+        if (this.discordWebhookURL) {
+          this.log('INFO', 'Sended text to Discord:', this.text);
+          await this.notifyManually('discord', this.text);
+        }
+        if (this.feishuWebhookURL) {
+          this.log('INFO', 'Sended text to Feishu:', this.text);
+          await this.notifyManually('feishu', this.text);
+        }
       } else {
         this.showWarn('Please input texts manually.');
       }
     },
-    async handleNotifyText() {
-      if (!this.discordWebhookURL) {
-        this.showWarn('Discord Webhook URL is not set');
-        return;
-      }
+    async notifyManually(provider, text) {
       try {
         this.loadingError = 'Sending...';
         const url = '/notify';
         const params = {
-          msgType: 'discord',
-          text: this.text,
-          discordWebhookURL: this.discordWebhookURL,
+          msgType: provider,
+          text: text,
         };
+        if (provider == 'discord') {
+          params.discordWebhookURL = this.discordWebhookURL;
+        } else if (provider == 'feishu') {
+          params.feishuWebhookURL = this.feishuWebhookURL;
+        } else {
+          this.showError('Illegal provider:', provider);
+          return;
+        }
         const response = await fetch(url, {
           method: 'POST',
           headers: {
