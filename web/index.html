@@ -59,6 +59,8 @@
                 name="eURL"
                 placeholder="Event URL from Kickertool"
                 v-model="kickertoolLiveURL"
+                @input="validateKickertoolLiveURL"
+                :class="kickertoolLiveURLClass"
               />
             </div>
             <h5>Discord Webhook URL</h5>
@@ -66,8 +68,10 @@
               <input
                 type="text"
                 name="discordURL"
-                placeholder="Webhook URL from Discord"
+                placeholder="Webhook URL from Discord (optional)"
                 v-model="discordWebhookURL"
+                @input="validateDiscordWebhookURL"
+                :class="discordWebhookURLClass"
               />
             </div>
             <h5>Feishu Webhook URL</h5>
@@ -75,8 +79,10 @@
               <input
                 type="text"
                 name="feishuURL"
-                placeholder="Webhook URL from Feishu"
+                placeholder="Webhook URL from Feishu (optional)"
                 v-model="feishuWebhookURL"
+                @input="validateFeishuWebhookURL"
+                :class="feishuWebhookURLClass"
               />
             </div>
             <h5>Locale</h5>

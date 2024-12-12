@@ -130,6 +130,10 @@ footer {
   padding: 4px 4px;
 }
 
+.panel-item-error {
+  background-color: #ffa8a8;
+}
+
 .panel-item textarea {
   width: 18.8rem;
   height: 80px;
