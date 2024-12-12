@@ -31,7 +31,7 @@
                 type="text"
                 name="tName"
                 placeholder="Tournament Name"
-                v-model="tournamentName"
+                v-model="setup.tournamentName"
               />
             </div>
             <h5>Event Name</h5>
@@ -40,7 +40,7 @@
                 type="text"
                 name="eName"
                 placeholder="Event Name: e.g. Open Double"
-                v-model="eventName"
+                v-model="setup.eventName"
               />
             </div>
             <h5>Event Phase</h5>
@@ -49,7 +49,7 @@
                 type="text"
                 name="ePhase"
                 placeholder="Event Phase: e.g. Qualification"
-                v-model="eventPhase"
+                v-model="setup.eventPhase"
               />
             </div>
             <h5>Kickertool Live URL</h5>
@@ -87,7 +87,7 @@
             </div>
             <h5>Locale</h5>
             <div class="panel-item">
-              <select v-model="selectedLocale" @change="updateLocale">
+              <select v-model="setup.selectedLocale" @change="updateLocale">
                 <option v-for="locale in locales" :key="locale" :value="locale">
                   {{ locale }}
                 </option>
@@ -95,7 +95,7 @@
             </div>
             <h5>Speech Synthesizer</h5>
             <div class="panel-item">
-              <select v-model="selectedVoice">
+              <select v-model="setup.selectedVoice">
                 <option
                   v-for="voice in voices"
                   :key="voice.name"
@@ -108,13 +108,16 @@
             <h5>Announcement</h5>
             <div class="panel-item">
               <textarea
-                v-model="text"
+                v-model="setup.text"
                 placeholder="Type or edit text manually and you may send whatever you want."
               ></textarea>
             </div>
             <div class="panel-item">
               <p>
                 <button @click="handleAnnounce">Announce</button>
+              </p>
+              <p>
+                <button @click="handleReset">Reset All Data</button>
               </p>
             </div>
           </div>
@@ -179,7 +182,7 @@
             <div class="control-logs">
               <h2>Logs</h2>
               <p>
-                <button @click="clear">Clear</button>
+                <button @click="handleClear">Clear</button>
               </p>
               <div class="logs">
                 <div class="log-item" v-for="log in logs">{{ log }}</div>

@@ -4,9 +4,15 @@ createApp({
   data() {
     return {
       // setup
-      tournamentName: '',
-      eventName: '',
-      eventPhase: '',
+      setup: {
+        tournamentName: '',
+        eventName: '',
+        eventPhase: '',
+        text: '',
+        selectedLocale: 'en-US',
+        selectedVoice: null,
+      },
+
       kickertoolLiveURL: '',
       kickertoolLiveURLClass: '',
       discordWebhookURL: '',
@@ -14,25 +20,69 @@ createApp({
       feishuWebhookURL: '',
       feishuWebhookURLClass: '',
       locales: ['en-US', 'zh-CN', 'zh-HK', 'zh-TW', 'ja-JP'],
-      selectedLocale: 'en-US',
-
-      // voices
-      text: '',
       voices: [],
-      selectedVoice: null,
 
-      // matches
       loading: false,
       loadingError: '',
+      // matches
       matches: [],
-
       // logs
       logs: [],
     };
   },
+  created() {
+    const setup = localStorage.getItem('setup');
+    if (setup) {
+      this.setup = JSON.parse(setup);
+    }
+    const kickertoolLiveURL = localStorage.getItem('kickertoolLiveURL');
+    if (kickertoolLiveURL) {
+      this.kickertoolLiveURL = kickertoolLiveURL;
+    }
+    const discordWebhookURL = localStorage.getItem('discordWebhookURL');
+    if (discordWebhookURL) {
+      this.discordWebhookURL = discordWebhookURL;
+    }
+    const feishuWebhookURL = localStorage.getItem('feishuWebhookURL');
+    if (feishuWebhookURL) {
+      this.feishuWebhookURL = feishuWebhookURL;
+    }
+  },
   mounted() {
     this.loadVoices();
     window.speechSynthesis.onvoiceschanged = this.loadVoices;
+  },
+  watch: {
+    setup: {
+      handler(newData) {
+        localStorage.setItem('setup', JSON.stringify(newData));
+      },
+      deep: true,
+    },
+    kickertoolLiveURL: {
+      handler(newData) {
+        if (!this.kickertoolLiveURL || this.validateKickertoolLiveURL()) {
+          localStorage.setItem('kickertoolLiveURL', newData);
+        }
+      },
+      deep: true,
+    },
+    discordWebhookURL: {
+      handler(newData) {
+        if (!this.discordWebhookURL || this.validateDiscordWebhookURL()) {
+          localStorage.setItem('discordWebhookURL', newData);
+        }
+      },
+      deep: true,
+    },
+    feishuWebhookURL: {
+      handler(newData) {
+        if (!this.feishuWebhookURL || this.validateFeishuWebhookURL()) {
+          localStorage.setItem('feishuWebhookURL', newData);
+        }
+      },
+      deep: true,
+    },
   },
   methods: {
     showError(...messages) {
@@ -52,24 +102,38 @@ createApp({
       this.logs.unshift(fullLog);
       console.log(fullLog);
     },
-    clear() {
+    handleClear() {
       this.logs = [];
+    },
+    handleReset() {
+      this.handleClear();
+      this.setup = {
+        tournamentName: '',
+        eventName: '',
+        eventPhase: '',
+        text: '',
+        selectedLocale: 'en-US',
+        selectedVoice: null,
+      };
+      this.kickertoolLiveURL = '';
+      this.discordWebhookURL = '';
+      this.feishuWebhookURL = '';
     },
     loadVoices() {
       this.voices = window.speechSynthesis.getVoices();
-      if (this.voices.length > 0 && !this.selectedVoice) {
-        this.selectedVoice = this.voices[0].name; // Select the first available voice
+      if (this.voices.length > 0 && !this.setup.selectedVoice) {
+        this.setup.selectedVoice = this.voices[0].name; // Select the first available voice
       }
       this.log('INFO', 'Loaded', this.voices.length, 'voice synthesizers');
     },
     updateLocale() {
-      if (this.selectedLocale) {
+      if (this.setup.selectedLocale) {
         for (i = 0; i < this.voices.length; i++) {
           if (
             this.voices[i].name.startsWith('Google') &&
-            this.selectedLocale == this.voices[i].lang
+            this.setup.selectedLocale == this.voices[i].lang
           ) {
-            this.selectedVoice = this.voices[i].name;
+            this.setup.selectedVoice = this.voices[i].name;
             return;
           }
         }
@@ -79,7 +143,7 @@ createApp({
       if (text) {
         const utterance = new SpeechSynthesisUtterance(text);
         const selected = this.voices.find(
-          voice => voice.name === this.selectedVoice,
+          voice => voice.name === this.setup.selectedVoice,
         );
         if (selected) {
           utterance.voice = selected;
@@ -93,13 +157,13 @@ createApp({
         this.loadingError = 'Sending...';
         const url = '/notify';
         const params = {
-          tournamentName: this.tournamentName,
-          eventName: this.eventName,
-          eventPhase: this.eventPhase,
+          tournamentName: this.setup.tournamentName,
+          eventName: this.setup.eventName,
+          eventPhase: this.setup.eventPhase,
+          locale: this.setup.selectedLocale,
           team1: match.team1,
           team2: match.team2,
           tableNo: match.tableNo,
-          locale: this.selectedLocale,
           msgType: provider,
           template: template,
         };
@@ -129,13 +193,13 @@ createApp({
         this.loadingError = 'Sending...';
         const url = '/notify';
         const params = {
-          tournamentName: this.tournamentName,
-          eventName: this.eventName,
-          eventPhase: this.eventPhase,
+          tournamentName: this.setup.tournamentName,
+          eventName: this.setup.eventName,
+          eventPhase: this.setup.eventPhase,
           team1: match.team1,
           team2: match.team2,
           tableNo: match.tableNo,
-          locale: this.selectedLocale,
+          locale: this.setup.selectedLocale,
           msgType: provider,
           template: template,
         };
@@ -199,7 +263,7 @@ createApp({
     async handleEdit(index) {
       this.log('INFO', 'Edited match index:', index);
       const match = this.currentMatch(index);
-      this.text = await this.buildSpeakText(match, 'speak', 'call_match');
+      this.setup.text = await this.buildSpeakText(match, 'speak', 'call_match');
     },
     async handleRecall(index, id) {
       this.log('INFO', 'Recalled player ID:', id);
@@ -220,16 +284,16 @@ createApp({
       }
     },
     async handleAnnounce() {
-      if (this.text) {
-        this.log('INFO', 'Announced text:', this.text);
-        this.textToSpeech(this.text);
+      if (this.setup.text) {
+        this.log('INFO', 'Announced text:', this.setup.text);
+        this.textToSpeech(this.setup.text);
         if (this.discordWebhookURL) {
-          this.log('INFO', 'Sent text to Discord:', this.text);
-          await this.notifyManually('discord', this.text);
+          this.log('INFO', 'Sent text to Discord:', this.setup.text);
+          await this.notifyManually('discord', this.setup.text);
         }
         if (this.feishuWebhookURL) {
-          this.log('INFO', 'Sent text to Feishu:', this.text);
-          await this.notifyManually('feishu', this.text);
+          this.log('INFO', 'Sent text to Feishu:', this.setup.text);
+          await this.notifyManually('feishu', this.setup.text);
         }
       } else {
         this.showWarn('Please input texts manually.');
@@ -269,42 +333,42 @@ createApp({
       }
     },
     validateFeishuWebhookURL() {
-      if (
-        !(
-          this.feishuWebhookURL.startsWith(
-            'https://open.feishu.cn/open-apis/bot/v2/hook/',
-          ) ||
-          this.feishuWebhookURL.startsWith(
-            'https://open.larkoffice.com/open-apis/bot/v2/hook/',
-          ) ||
-          this.feishuWebhookURL.startsWith(
-            'https://open.larksuite.com/open-apis/bot/v2/hook/',
+      if (!this.feishuWebhookURL) {
+        if (
+          !(
+            this.feishuWebhookURL.startsWith(
+              'https://open.feishu.cn/open-apis/bot/v2/hook/',
+            ) ||
+            this.feishuWebhookURL.startsWith(
+              'https://open.larkoffice.com/open-apis/bot/v2/hook/',
+            ) ||
+            this.feishuWebhookURL.startsWith(
+              'https://open.larksuite.com/open-apis/bot/v2/hook/',
+            )
           )
-        )
-      ) {
-        this.feishuWebhookURLClass = 'panel-item-error';
-        return false;
+        ) {
+          this.feishuWebhookURLClass = 'panel-item-error';
+          return false;
+        }
       }
 
       this.feishuWebhookURLClass = '';
       return true;
     },
     validateDiscordWebhookURL() {
-      if (
-        !this.discordWebhookURL.startsWith('https://discord.com/api/webhooks/')
-      ) {
-        this.discordWebhookURLClass = 'panel-item-error';
-        return false;
+      if (this.discordWebhookURL) {
+        if (
+          !this.discordWebhookURL.startsWith('https://discord.com/api/webhooks/')
+        ) {
+          this.discordWebhookURLClass = 'panel-item-error';
+          return false;
+        }
       }
 
       this.discordWebhookURLClass = '';
       return true;
     },
     validateKickertoolLiveURL() {
-      if (!this.kickertoolLiveURL) {
-        this.kickertoolLiveURLClass = 'panel-item-error';
-        return false;
-      }
       if (
         !(
           this.kickertoolLiveURL.startsWith('https://live.kickertool.de') &&
@@ -319,6 +383,11 @@ createApp({
       return true;
     },
     async handleCrawl() {
+      if (!this.kickertoolLiveURL) {
+        this.kickertoolLiveURLClass = 'panel-item-error';
+        this.showWarn('Kickertool Live URL is not set');
+        return;
+      }
       if (!this.validateKickertoolLiveURL()) {
         this.showWarn('Kickertool Live URL is not valid');
         return;
