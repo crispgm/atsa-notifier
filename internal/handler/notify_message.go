@@ -26,7 +26,7 @@ func buildMessage(
 
 	var team1, team2 []atsa.Player
 	for _, player := range params.Team1 {
-		p := playerDB.FindPlayers(player)
+		p := playerDB.FindPlayersByFullName(player)
 		if len(p) == 1 {
 			team1 = append(team1, p[0])
 		} else {
@@ -35,7 +35,7 @@ func buildMessage(
 		}
 	}
 	for _, player := range params.Team2 {
-		p := playerDB.FindPlayers(player)
+		p := playerDB.FindPlayersByFullName(player)
 		if len(p) == 1 {
 			team2 = append(team2, p[0])
 		} else {
@@ -57,6 +57,7 @@ func buildMessage(
 	if template, ok := template[params.Locale]; ok {
 		speakBuilder := message.Speak{}
 		discordBuilder := message.Discord{}
+		feishuBuilder := message.Feishu{}
 		if msgType == "speak" {
 			if templateName == "call_match" {
 				msg, err = speakBuilder.CallMatch(&template, params.TournamentName, params.EventName, params.EventPhase, params.TableNo, team1, team2)
@@ -71,10 +72,10 @@ func buildMessage(
 			}
 		} else if msgType == "feishu" {
 			if templateName == "call_match" {
+				msg, err = feishuBuilder.CallMatch(&template, params.TournamentName, params.EventName, params.EventPhase, params.TableNo, team1, team2)
 			} else if templateName == "recall_player" {
+				msg, err = feishuBuilder.RecallPlayer(&template, params.TournamentName, params.EventName, params.EventPhase, params.TableNo, team1[0])
 			}
-			ErrorResponse(c, CodeLoadTemplate, "feishu notification is not implemented", nil)
-			return ""
 		}
 	} else {
 		ErrorResponse(c, CodeLoadTemplate, fmt.Sprintf("[%s] template not found", params.Locale), nil)
