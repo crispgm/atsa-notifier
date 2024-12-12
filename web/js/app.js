@@ -8,8 +8,11 @@ createApp({
       eventName: '',
       eventPhase: '',
       kickertoolLiveURL: '',
+      kickertoolLiveURLClass: '',
       discordWebhookURL: '',
+      discordWebhookURLClass: '',
       feishuWebhookURL: '',
+      feishuWebhookURLClass: '',
       locales: ['en-US', 'zh-CN', 'zh-HK', 'zh-TW', 'ja-JP'],
       selectedLocale: 'en-US',
 
@@ -265,9 +268,59 @@ createApp({
         this.loading = false;
       }
     },
-    async handleCrawl() {
+    validateFeishuWebhookURL() {
+      if (
+        !(
+          this.feishuWebhookURL.startsWith(
+            'https://open.feishu.cn/open-apis/bot/v2/hook/',
+          ) ||
+          this.feishuWebhookURL.startsWith(
+            'https://open.larkoffice.com/open-apis/bot/v2/hook/',
+          ) ||
+          this.feishuWebhookURL.startsWith(
+            'https://open.larksuite.com/open-apis/bot/v2/hook/',
+          )
+        )
+      ) {
+        this.feishuWebhookURLClass = 'panel-item-error';
+        return false;
+      }
+
+      this.feishuWebhookURLClass = '';
+      return true;
+    },
+    validateDiscordWebhookURL() {
+      if (
+        !this.discordWebhookURL.startsWith('https://discord.com/api/webhooks/')
+      ) {
+        this.discordWebhookURLClass = 'panel-item-error';
+        return false;
+      }
+
+      this.discordWebhookURLClass = '';
+      return true;
+    },
+    validateKickertoolLiveURL() {
       if (!this.kickertoolLiveURL) {
-        this.showWarn('Kickertool Live URL is not set');
+        this.kickertoolLiveURLClass = 'panel-item-error';
+        return false;
+      }
+      if (
+        !(
+          this.kickertoolLiveURL.startsWith('https://live.kickertool.de') &&
+          this.kickertoolLiveURL.endsWith('/live')
+        )
+      ) {
+        this.kickertoolLiveURLClass = 'panel-item-error';
+        return false;
+      }
+
+      this.kickertoolLiveURLClass = '';
+      return true;
+    },
+    async handleCrawl() {
+      if (!this.validateKickertoolLiveURL()) {
+        this.showWarn('Kickertool Live URL is not valid');
         return;
       }
       this.log('INFO', 'Crawled', this.kickertoolLiveURL);
