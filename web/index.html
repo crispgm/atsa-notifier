@@ -125,17 +125,15 @@
                 <div class="match" v-for="(match, index) in matches">
                   <div class="match-table">{{ match.tableNo }}</div>
                   <div class="match-team match-host">
-                    <div
-                      class="match-player"
-                      v-for="(player, pindex) in match.team1"
-                    >
-                      <div class="match-player-name">
-                        {{ player }}
+                    <div class="match-player" v-for="player in match.team1">
+                      <div class="match-player-id">
+                        {{ player.id.slice(-5) }}
                       </div>
+                      <div class="match-player-name">{{ player.name }}</div>
                       <div class="match-player-ops">
                         <button
                           class="match-player-ops-btn"
-                          @click="handleRecall(index, 0, pindex)"
+                          @click="handleRecall(index, player.id)"
                         >
                           Recall
                         </button>
@@ -144,25 +142,22 @@
                   </div>
                   <div class="match-vs">vs.</div>
                   <div class="match-team match-away">
-                    <div
-                      class="match-player"
-                      v-for="(player, pindex) in match.team2"
-                    >
-                      <div class="match-player-name">
-                        {{ player }}
+                    <div class="match-player" v-for="player in match.team2">
+                      <div class="match-player-id">
+                        {{ player.id.slice(-5) }}
                       </div>
+                      <div class="match-player-name">{{ player.name }}</div>
                       <div class="match-player-ops">
                         <button
                           class="match-player-ops-btn"
-                          @click="handleRecall(index, 1, pindex)"
+                          @click="handleRecall(index, player.id)"
                         >
                           Recall
                         </button>
                       </div>
                     </div>
                   </div>
-                  <div class="match-bar">
-                  </div>
+                  <div class="match-bar"></div>
                   <div class="match-ops">
                     <button class="match-ops-btn" @click="handleCall(index)">
                       Call
@@ -187,7 +182,8 @@
           </div>
         </div>
         <footer>
-          Copyright &copy; <a href="https://asiatablesoccer.org/">ATSA</a>, 2024.
+          Copyright &copy; <a href="https://asiatablesoccer.org/">ATSA</a>,
+          2024.
         </footer>
       </main>
     </div>

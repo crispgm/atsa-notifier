@@ -24,6 +24,29 @@ func NewPlayerDB(players []Player) *PlayerDB {
 	}
 }
 
+// FindPlayer find player by ID
+func (db *PlayerDB) FindPlayer(input string) *Player {
+	var player Player
+	// Normalize
+	input = strings.TrimSpace(input)
+	if input == "" {
+		return nil
+	}
+
+	if res, ok := db.cache[input]; ok && len(res) > 0 {
+		return &(res[0])
+	}
+	for _, p := range db.db {
+		if p.ID == input {
+			player = p
+			db.cache[input] = []Player{player}
+			return &player
+		}
+	}
+
+	return nil
+}
+
 // FindPlayersByFullName find player by full name
 // No other names
 // No fuzzy
