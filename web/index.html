@@ -70,6 +70,15 @@
                 v-model="discordWebhookURL"
               />
             </div>
+            <h5>Feishu Webhook URL</h5>
+            <div class="panel-item">
+              <input
+                type="text"
+                name="feishuURL"
+                placeholder="Webhook URL from Feishu"
+                v-model="feishuWebhookURL"
+              />
+            </div>
             <h5>Locale</h5>
             <div class="panel-item">
               <select v-model="selectedLocale" @change="updateLocale">
@@ -99,8 +108,8 @@
             </div>
             <div class="panel-item">
               <p>
-                <button @click="speakText">Speak</button>&nbsp;
-                <button @click="notifyText">Notify</button>
+                <button @click="handleSpeakText">Speak</button>&nbsp;
+                <button @click="handleNotifyText">Notify</button>
               </p>
             </div>
           </div>
@@ -109,7 +118,7 @@
               <h2>Control Panel</h2>
               <div class="control-area">
                 <span class="control-crawl">
-                  <button @click="crawl">Crawl</button>
+                  <button @click="handleCrawl">Crawl</button>
                 </span>
                 <span class="control-loading"> {{ loadingError }} </span>
               </div>
@@ -121,13 +130,13 @@
                       class="match-player"
                       v-for="(player, pindex) in match.team1"
                     >
-                      <div class="match-player-name match-player1">
+                      <div class="match-player-name">
                         {{ player }}
                       </div>
                       <div class="match-player-ops">
                         <button
                           class="match-player-ops-btn"
-                          @click="recall(index, 0, pindex)"
+                          @click="handleRecall(index, 0, pindex)"
                         >
                           Recall
                         </button>
@@ -140,30 +149,28 @@
                       class="match-player"
                       v-for="(player, pindex) in match.team2"
                     >
-                      <div class="match-player-name match-player2">
+                      <div class="match-player-name">
                         {{ player }}
                       </div>
                       <div class="match-player-ops">
                         <button
                           class="match-player-ops-btn"
-                          @click="recall(index, 1, pindex)"
+                          @click="handleRecall(index, 1, pindex)"
                         >
                           Recall
                         </button>
                       </div>
                     </div>
                   </div>
+                  <div class="match-bar">
+                  </div>
                   <div class="match-ops">
-                    <button class="match-ops-btn" @click="call(index)">
+                    <button class="match-ops-btn" @click="handleCall(index)">
                       Call
                     </button>
                     &nbsp;
-                    <button class="match-ops-btn" @click="edit(index)">
+                    <button class="match-ops-btn" @click="handleEdit(index)">
                       Edit
-                    </button>
-                    &nbsp;
-                    <button class="match-ops-btn" @click="notify(index)">
-                      Notify
                     </button>
                   </div>
                 </div>

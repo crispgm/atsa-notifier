@@ -109,7 +109,7 @@ footer {
 }
 
 #control {
-  min-width: 88rem;
+  min-width: 85rem;
 }
 
 .panel {
@@ -189,6 +189,30 @@ footer {
   background-color: #ced4da;
 }
 
+.match:hover {
+  background-color: #e9ecef;
+}
+
+.match-vs {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+  height: 40px;
+  width: 3rem;
+  background-color: #ced4da;
+}
+
+.match-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+  height: 40px;
+  width: 0.4rem;
+  background-color: #ced4da;
+}
+
 .match-team {
   display: flex;
   flex-wrap: wrap;
@@ -224,7 +248,8 @@ footer {
   border: none;
   border-radius: 4px;
   padding: 4px 8px;
-  background-color: #ced4da;
+  color: #f8f9fa;
+  background-color: #495057;
 }
 
 .match-ops {
