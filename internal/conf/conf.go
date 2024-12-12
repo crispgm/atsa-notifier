@@ -10,8 +10,9 @@ import (
 // Conf .
 type Conf struct {
 	Port      string              `yaml:"port"`
-	Templates map[string]Template `yaml:"templates"`
+	Mode      string              `yaml:"mode"`
 	ATSADB    ATSADatabase        `yaml:"atsa_database"`
+	Templates map[string]Template `yaml:"templates"`
 }
 
 // Template .
@@ -25,7 +26,8 @@ type Template struct {
 
 // ATSADatabase .
 type ATSADatabase struct {
-	DefaultPath string `yaml:"default_path"`
+	LocalPath string `yaml:"local_path"`
+	WebURL    string `yaml:"web_url"`
 }
 
 // LoadConf .
