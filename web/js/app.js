@@ -333,7 +333,7 @@ createApp({
       }
     },
     validateFeishuWebhookURL() {
-      if (!this.feishuWebhookURL) {
+      if (this.feishuWebhookURL) {
         if (
           !(
             this.feishuWebhookURL.startsWith(
