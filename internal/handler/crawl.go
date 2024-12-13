@@ -58,7 +58,7 @@ func CrawlHandler(c *gin.Context) {
 			if len(p) == 1 {
 				matchWithPlayerInfo.Team1 = append(matchWithPlayerInfo.Team1, p[0])
 			} else {
-				matchWithPlayerInfo.Team1 = append(matchWithPlayerInfo.Team1, convertPlayer(name))
+				matchWithPlayerInfo.Team1 = append(matchWithPlayerInfo.Team1, atsa.CreatePlayerByFullname(name))
 				fmt.Println("no or multiple players found", name)
 			}
 		}
@@ -67,7 +67,7 @@ func CrawlHandler(c *gin.Context) {
 			if len(p) == 1 {
 				matchWithPlayerInfo.Team2 = append(matchWithPlayerInfo.Team2, p[0])
 			} else {
-				matchWithPlayerInfo.Team2 = append(matchWithPlayerInfo.Team2, convertPlayer(name))
+				matchWithPlayerInfo.Team2 = append(matchWithPlayerInfo.Team2, atsa.CreatePlayerByFullname(name))
 				fmt.Println("no or multiple players found", name)
 			}
 		}

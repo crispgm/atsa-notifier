@@ -30,7 +30,7 @@ func buildMessage(
 		if p != nil {
 			team1 = append(team1, *p)
 		} else {
-			team1 = append(team1, convertPlayer(player))
+			team1 = append(team1, atsa.CreatePlayerByFullname(player))
 			fmt.Println("no players found", player)
 		}
 	}
@@ -39,7 +39,7 @@ func buildMessage(
 		if p != nil {
 			team2 = append(team2, *p)
 		} else {
-			team2 = append(team2, convertPlayer(player))
+			team2 = append(team2, atsa.CreatePlayerByFullname(player))
 			fmt.Println("no players found", player)
 		}
 	}
@@ -86,25 +86,4 @@ func buildMessage(
 		return ""
 	}
 	return strings.TrimSpace(msg)
-}
-
-func convertPlayer(fullName string) atsa.Player {
-	var firstName, lastName string
-	names := strings.Split(fullName, " ")
-	if len(names) == 2 {
-		firstName = names[0]
-		lastName = names[1]
-	} else if len(names) > 2 {
-		firstName = strings.Join(names[0:len(names)-1], " ")
-		lastName = names[len(names)-1]
-	} else {
-		lastName = names[0]
-	}
-
-	return atsa.Player{
-		FullName:  fullName,
-		FirstName: firstName,
-		LastName:  lastName,
-		Name:      fmt.Sprintf("%s %s", firstName, lastName),
-	}
 }
