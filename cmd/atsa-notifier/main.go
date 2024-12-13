@@ -36,7 +36,7 @@ func main() {
 	r.StaticFile("/", "web/index.html")
 
 	// Define routes
-	r.GET("/crawl", handler.CrawlHandler)
+	r.GET("/sync", handler.SyncHandler)
 	r.POST("/notify", handler.NotifyHandler)
 
 	// Run the server

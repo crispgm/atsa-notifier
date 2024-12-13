@@ -382,7 +382,7 @@ createApp({
       this.kickertoolLiveURLClass = '';
       return true;
     },
-    async handleCrawl() {
+    async handleSync() {
       if (!this.kickertoolLiveURL) {
         this.kickertoolLiveURLClass = 'panel-item-error';
         this.showWarn('Kickertool Live URL is not set');
@@ -392,10 +392,10 @@ createApp({
         this.showWarn('Kickertool Live URL is not valid');
         return;
       }
-      this.log('INFO', 'Crawled', this.kickertoolLiveURL);
+      this.log('INFO', 'Synced', this.kickertoolLiveURL);
       try {
         this.loadingError = 'Loading...';
-        const url = '/crawl?url=' + this.kickertoolLiveURL;
+        const url = '/sync?url=' + this.kickertoolLiveURL;
         const response = await fetch(url);
         if (!response.ok) {
           this.showError('Network response was not ok:', response.statusText);

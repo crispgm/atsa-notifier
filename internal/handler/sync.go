@@ -9,28 +9,28 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// CrawlParams .
-type CrawlParams struct {
+// SyncParams .
+type SyncParams struct {
 	URL string `form:"url" binding:"required"`
 }
 
-// CrawlMatch .
-type CrawlMatch struct {
+// SyncMatch .
+type SyncMatch struct {
 	Team1   []atsa.Player `json:"team1"`
 	Team2   []atsa.Player `json:"team2"`
 	TableNo string        `json:"tableNo"`
 }
 
-// CrawlOutput .
-type CrawlOutput struct {
-	URL     string       `json:"url"`
-	Page    string       `json:"page"`
-	Matches []CrawlMatch `json:"matches"`
+// SyncOutput .
+type SyncOutput struct {
+	URL     string      `json:"url"`
+	Page    string      `json:"page"`
+	Matches []SyncMatch `json:"matches"`
 }
 
-// CrawlHandler serves the main page.
-func CrawlHandler(c *gin.Context) {
-	var params CrawlParams
+// SyncHandler serves the main page.
+func SyncHandler(c *gin.Context) {
+	var params SyncParams
 	err := c.BindQuery(&params)
 	if err != nil {
 		ErrorResponse(c, CodeParamsErr, err.Error(), nil)
@@ -42,7 +42,7 @@ func CrawlHandler(c *gin.Context) {
 		ErrorResponse(c, CodeParamsErr, err.Error(), nil)
 		return
 	}
-	var output CrawlOutput
+	var output SyncOutput
 	players, ok := global.GetGlobalData("players").([]atsa.Player)
 	if !ok {
 		ErrorResponse(c, CodeLoadPlayer, "load player failed", nil)
@@ -50,7 +50,7 @@ func CrawlHandler(c *gin.Context) {
 	}
 	playerDB := atsa.NewPlayerDB(players)
 	for _, match := range *matches {
-		matchWithPlayerInfo := CrawlMatch{
+		matchWithPlayerInfo := SyncMatch{
 			TableNo: match.TableNo,
 		}
 		for _, name := range match.Team1 {
