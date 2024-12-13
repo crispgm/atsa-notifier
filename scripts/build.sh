@@ -24,6 +24,10 @@ cp -r ./web ./output/atsa-notifier
 cp -r ./conf ./output/atsa-notifier
 cp -r ./data ./output/atsa-notifier
 cd ./output
-zip -r "atsa-notifier-${GOOS}-${GOARCH}.zip" ./atsa-notifier
+if [ "$GOOS" = "linux" ]; then
+	tar zcvf "atsa-notifier-${GOOS}-${GOARCH}.tar.gz" ./atsa-notifier
+else
+	zip -r "atsa-notifier-${GOOS}-${GOARCH}.zip" ./atsa-notifier
+fi
 rm -rf atsa-notifier
 cd ..
