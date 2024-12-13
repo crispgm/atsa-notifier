@@ -1,0 +1,41 @@
+name: release
+on:
+  push:
+    tags:
+      - v[0-9]+.[0-9]+.[0-9]+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: '1.20'
+
+    - name: Build for macOS
+      run: |
+        GOOS=darwin GOARCH=amd64 ./scripts/build.sh
+
+    - name: Build for Windows
+      run: |
+        GOOS=windows GOARCH=amd64 ./scripts/build.sh
+
+    - name: Build for Linux
+      run: |
+        GOOS=linux GOARCH=amd64 ./scripts/build.sh
+
+    - name: Create Release
+      id: create_release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag: ${{ github.ref }}
+        files: |
+          atsa-notifier-darwin-amd64.zip
+          atsa-notifier-windows-amd64.zip
+          atsa-notifier-linux-amd64.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
