@@ -2,8 +2,9 @@ package scraper
 
 // Match .
 type Match struct {
-	Team1    []string `json:"team1,omitempty"`
-	Team2    []string `json:"team2,omitempty"`
-	TableNo  string   `json:"tableNo,omitempty"`
-	Duration string   `json:"duration,omitempty"`
+	Team1    []string `json:"team1"`
+	Team2    []string `json:"team2"`
+	TableNo  string   `json:"tableNo"`
+	Duration string   `json:"duration"`
+	Valid    bool     `json:"valid"`
 }

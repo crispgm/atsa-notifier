@@ -41,6 +41,11 @@ func (s *Scraper) Scrape(url string) (*[]Match, error) {
 				m.Team2 = splitNames(e.Text)
 			})
 		})
+		if m.Team1 == nil || m.Team2 == nil {
+			m.Valid = false
+		} else {
+			m.Valid = true
+		}
 		matches = append(matches, m)
 	})
 	c.Visit(url)

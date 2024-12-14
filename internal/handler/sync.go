@@ -17,6 +17,7 @@ type SyncMatch struct {
 	Team1   []atsa.Player `json:"team1"`
 	Team2   []atsa.Player `json:"team2"`
 	TableNo string        `json:"tableNo"`
+	Valid   bool          `json:"valid"`
 }
 
 // SyncOutput .
@@ -51,6 +52,7 @@ func SyncHandler(c *gin.Context) {
 	for _, match := range *matches {
 		matchWithPlayerInfo := SyncMatch{
 			TableNo: match.TableNo,
+			Valid:   match.Valid,
 		}
 		for _, name := range match.Team1 {
 			matchWithPlayerInfo.Team1 = append(matchWithPlayerInfo.Team1, *findOrCreatePlayerByName(c, playerDB, name))

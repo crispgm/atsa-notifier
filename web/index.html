@@ -176,13 +176,15 @@
                   </div>
                   <div class="match-bar"></div>
                   <div class="match-ops">
-                    <button class="match-ops-btn" @click="handleCall(match)">
-                      Call
-                    </button>
-                    &nbsp;
-                    <button class="match-ops-btn" @click="handleEdit(match)">
-                      Edit
-                    </button>
+                    <div class="match-ops-area" v-if="match.valid">
+                      <button class="match-ops-btn" @click="handleCall(match)">
+                        Call
+                      </button>
+                      &nbsp;
+                      <button class="match-ops-btn" @click="handleEdit(match)">
+                        Edit
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
