@@ -74,6 +74,7 @@ func NotifyHandler(c *gin.Context) {
 		discordSender := provider.DiscordWebhook{}
 		_, err = discordSender.Send(params.DiscordWebhookURL, &msg)
 		if err != nil {
+			getLogger(c).Errorln("send Discord failed", err.Error())
 			ErrorResponse(c, CodeParamsErr, err.Error(), nil)
 			return
 		}
@@ -81,6 +82,7 @@ func NotifyHandler(c *gin.Context) {
 		feishuSender := provider.FeishuWebhook{}
 		_, err = feishuSender.Send(params.FeishuWebhookURL, &msg)
 		if err != nil {
+			getLogger(c).Errorln("send Feishu failed", err.Error())
 			ErrorResponse(c, CodeParamsErr, err.Error(), nil)
 			return
 		}

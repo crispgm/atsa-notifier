@@ -19,22 +19,24 @@ func buildMessage(
 ) string {
 	players, ok := global.GetGlobalData("players").([]atsa.Player)
 	if !ok {
-		ErrorResponse(c, CodeLoadPlayer, "load player failed", nil)
+		getLogger(c).Errorln("load players failed")
+		ErrorResponse(c, CodeLoadPlayer, "load players failed", nil)
 		return ""
 	}
 	playerDB := atsa.NewPlayerDB(players)
 
 	var team1, team2 []atsa.Player
 	for _, player := range params.Team1 {
-		team1 = append(team1, *findOrCreatePlayerByID(playerDB, &player))
+		team1 = append(team1, *findOrCreatePlayerByID(c, playerDB, &player))
 	}
 	for _, player := range params.Team2 {
-		team2 = append(team2, *findOrCreatePlayerByID(playerDB, &player))
+		team2 = append(team2, *findOrCreatePlayerByID(c, playerDB, &player))
 	}
 	// Create the message content with mention
 	template, ok := global.GetGlobalData("templates").(map[string]conf.Template)
 	if !ok {
-		ErrorResponse(c, CodeLoadTemplate, "load template failed", nil)
+		getLogger(c).Errorln("load templates failed")
+		ErrorResponse(c, CodeLoadTemplate, "load templates failed", nil)
 		return ""
 	}
 	if params.Locale == "" {
@@ -66,23 +68,25 @@ func buildMessage(
 			}
 		}
 	} else {
-		ErrorResponse(c, CodeLoadTemplate, fmt.Sprintf("[%s] template not found", params.Locale), nil)
+		getLogger(c).Errorln(templateName, "template not found")
+		ErrorResponse(c, CodeLoadTemplate, fmt.Sprintf("[%s] template not found", templateName), nil)
 		return ""
 	}
 	if err != nil {
+		getLogger(c).Errorln(err.Error())
 		ErrorResponse(c, CodeLoadTemplate, err.Error(), nil)
 		return ""
 	}
 	return strings.TrimSpace(msg)
 }
 
-func findOrCreatePlayerByID(playerDB *atsa.PlayerDB, player *atsa.Player) *atsa.Player {
+func findOrCreatePlayerByID(c *gin.Context, playerDB *atsa.PlayerDB, player *atsa.Player) *atsa.Player {
 	if len(player.ID) > 0 {
 		p := playerDB.FindPlayer(player.ID)
 		if p != nil {
 			return p
 		}
-		fmt.Println("no players found by:", player.ID)
+		getLogger(c).Warnln("no players found", player.ID)
 	}
 
 	newPlayer := atsa.CreatePlayerByFullname(player.Name)

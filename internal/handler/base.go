@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 )
 
 // CodeSuccess .
@@ -52,4 +53,14 @@ func ErrorResponse(c *gin.Context, code int, msg string, data any) {
 		Data: data,
 	}
 	c.JSON(http.StatusOK, resp)
+}
+
+func getLogger(c *gin.Context) *logrus.Entry {
+	logger, ok := c.Get("logger")
+	if !ok {
+		logger = logrus.WithField("context", "missing")
+	}
+	logEntry := logger.(*logrus.Entry)
+
+	return logEntry
 }

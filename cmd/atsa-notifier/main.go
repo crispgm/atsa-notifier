@@ -3,8 +3,10 @@ package main
 
 import (
 	"os"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 
 	"github.com/crispgm/atsa-notifier/internal/conf"
 	"github.com/crispgm/atsa-notifier/internal/global"
@@ -12,7 +14,6 @@ import (
 )
 
 func main() {
-	// Init
 	args := os.Args
 	path := ""
 	if len(args) < 2 {
@@ -25,8 +26,29 @@ func main() {
 	// Load players
 	global.LoadGlobalData(cfg)
 
-	// web handlers
-	r := gin.Default()
+	// Init web handlers
+	logrus.SetFormatter(&logrus.TextFormatter{
+		FullTimestamp: true,
+	})
+	r := gin.New()
+
+	// Init log
+	log := logrus.New()
+	r.Use(func(c *gin.Context) {
+		start := time.Now()
+		c.Next()
+		duration := time.Since(start)
+		log.WithFields(logrus.Fields{
+			"method":      c.Request.Method,
+			"path":        c.Request.URL.Path,
+			"client_ip":   c.ClientIP(),
+			"remote_ip":   c.RemoteIP(),
+			"status":      c.Writer.Status(),
+			"response_ms": duration.Milliseconds(),
+			"response_us": duration.Microseconds(),
+		}).Info("handled request")
+		c.Set("logger", log)
+	})
 
 	// Serve static files
 	r.Static("/css", "./web/css")
