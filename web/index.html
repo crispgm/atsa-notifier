@@ -87,7 +87,11 @@
             </div>
             <h5>Locale</h5>
             <div class="panel-item">
-              <select v-model="setup.selectedLocale" @change="updateLocale">
+              <select
+                class="panel-item-locale"
+                v-model="setup.selectedLocale"
+                @change="updateLocale"
+              >
                 <option v-for="locale in locales" :key="locale" :value="locale">
                   {{ locale }}
                 </option>
@@ -95,7 +99,10 @@
             </div>
             <h5>Speech Synthesizer</h5>
             <div class="panel-item">
-              <select v-model="setup.selectedVoice">
+              <select
+                class="panel-item-synthesizer"
+                v-model="setup.selectedVoice"
+              >
                 <option
                   v-for="voice in voices"
                   :key="voice.name"
@@ -108,6 +115,7 @@
             <h5>Announcement</h5>
             <div class="panel-item">
               <textarea
+                class="panel-item-textarea"
                 v-model="setup.text"
                 placeholder="Type or edit text manually and you may send whatever you want."
               ></textarea>

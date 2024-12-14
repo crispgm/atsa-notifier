@@ -105,7 +105,7 @@ footer {
 }
 
 #setup {
-  min-width: 22rem;
+  width: 20rem;
 }
 
 #control {
@@ -134,9 +134,19 @@ footer {
   background-color: #ffa8a8;
 }
 
-.panel-item textarea {
-  width: 18.8rem;
+.panel-item-locale {
+  height: 1.6rem;
+  width: 6.8rem;
+}
+
+.panel-item-synthesizer {
+  height: 1.6rem;
+  width: 16.8rem;
+}
+
+.panel-item-textarea {
   height: 80px;
+  width: 16.8rem;
   padding: 4px 4px;
 }
 
