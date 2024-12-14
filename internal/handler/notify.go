@@ -2,18 +2,19 @@ package handler
 
 import (
 	"github.com/crispgm/atsa-notifier/internal/provider"
+	"github.com/crispgm/atsa-notifier/pkg/atsa"
 	"github.com/gin-gonic/gin"
 )
 
 // NotifyParams .
 type NotifyParams struct {
-	TournamentName string   `json:"tournamentName"`
-	EventName      string   `json:"eventName"`
-	EventPhase     string   `json:"eventPhase"`
-	Team1          []string `json:"team1"`
-	Team2          []string `json:"team2"`
-	TableNo        string   `json:"tableNo"`
-	Locale         string   `json:"locale"`
+	TournamentName string        `json:"tournamentName"`
+	EventName      string        `json:"eventName"`
+	EventPhase     string        `json:"eventPhase"`
+	Team1          []atsa.Player `json:"team1"`
+	Team2          []atsa.Player `json:"team2"`
+	TableNo        string        `json:"tableNo"`
+	Locale         string        `json:"locale"`
 
 	MsgType  string `json:"msgType"`  // speak, discord, feishu
 	Template string `json:"template"` // e.g. call_match, recall_player or text; text is given by user manually

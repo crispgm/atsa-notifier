@@ -26,22 +26,10 @@ func buildMessage(
 
 	var team1, team2 []atsa.Player
 	for _, player := range params.Team1 {
-		p := playerDB.FindPlayer(player)
-		if p != nil {
-			team1 = append(team1, *p)
-		} else {
-			team1 = append(team1, atsa.CreatePlayerByFullname(player))
-			fmt.Println("no players found", player)
-		}
+		team1 = append(team1, *findOrCreatePlayerByID(playerDB, &player))
 	}
 	for _, player := range params.Team2 {
-		p := playerDB.FindPlayer(player)
-		if p != nil {
-			team2 = append(team2, *p)
-		} else {
-			team2 = append(team2, atsa.CreatePlayerByFullname(player))
-			fmt.Println("no players found", player)
-		}
+		team2 = append(team2, *findOrCreatePlayerByID(playerDB, &player))
 	}
 	// Create the message content with mention
 	template, ok := global.GetGlobalData("templates").(map[string]conf.Template)
@@ -86,4 +74,17 @@ func buildMessage(
 		return ""
 	}
 	return strings.TrimSpace(msg)
+}
+
+func findOrCreatePlayerByID(playerDB *atsa.PlayerDB, player *atsa.Player) *atsa.Player {
+	if len(player.ID) > 0 {
+		p := playerDB.FindPlayer(player.ID)
+		if p != nil {
+			return p
+		}
+		fmt.Println("no players found by:", player.ID)
+	}
+
+	newPlayer := atsa.CreatePlayerByFullname(player.Name)
+	return &newPlayer
 }

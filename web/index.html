@@ -150,7 +150,7 @@
                       <div class="match-player-ops">
                         <button
                           class="match-player-ops-btn"
-                          @click="handleRecall(index, player.id)"
+                          @click="handleRecall(match, player)"
                         >
                           Recall
                         </button>
@@ -167,7 +167,7 @@
                       <div class="match-player-ops">
                         <button
                           class="match-player-ops-btn"
-                          @click="handleRecall(index, player.id)"
+                          @click="handleRecall(match, player)"
                         >
                           Recall
                         </button>
@@ -176,11 +176,11 @@
                   </div>
                   <div class="match-bar"></div>
                   <div class="match-ops">
-                    <button class="match-ops-btn" @click="handleCall(index)">
+                    <button class="match-ops-btn" @click="handleCall(match)">
                       Call
                     </button>
                     &nbsp;
-                    <button class="match-ops-btn" @click="handleEdit(index)">
+                    <button class="match-ops-btn" @click="handleEdit(match)">
                       Edit
                     </button>
                   </div>

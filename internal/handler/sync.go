@@ -54,26 +54,32 @@ func SyncHandler(c *gin.Context) {
 			TableNo: match.TableNo,
 		}
 		for _, name := range match.Team1 {
-			p := playerDB.FindPlayersByFullName(name)
-			if len(p) == 1 {
-				matchWithPlayerInfo.Team1 = append(matchWithPlayerInfo.Team1, p[0])
-			} else {
-				matchWithPlayerInfo.Team1 = append(matchWithPlayerInfo.Team1, atsa.CreatePlayerByFullname(name))
-				fmt.Println("no or multiple players found", name)
-			}
+			matchWithPlayerInfo.Team1 = append(matchWithPlayerInfo.Team1, *findOrCreatePlayerByName(playerDB, name))
 		}
 		for _, name := range match.Team2 {
-			p := playerDB.FindPlayersByFullName(name)
-			if len(p) == 1 {
-				matchWithPlayerInfo.Team2 = append(matchWithPlayerInfo.Team2, p[0])
-			} else {
-				matchWithPlayerInfo.Team2 = append(matchWithPlayerInfo.Team2, atsa.CreatePlayerByFullname(name))
-				fmt.Println("no or multiple players found", name)
-			}
+			matchWithPlayerInfo.Team2 = append(matchWithPlayerInfo.Team2, *findOrCreatePlayerByName(playerDB, name))
 		}
 		output.Matches = append(output.Matches, matchWithPlayerInfo)
 	}
 	output.URL = params.URL
 	output.Page = "kickertool_live"
 	SuccessResponse(c, output)
+}
+
+func findOrCreatePlayerByName(playerDB *atsa.PlayerDB, name string) *atsa.Player {
+	p := playerDB.FindPlayersByFullName(name)
+	np := len(p)
+	if np == 1 {
+		return &(p[0])
+	}
+
+	if np > 1 {
+		fmt.Println("multiple players found", name)
+	} else {
+
+		fmt.Println("no players found", name)
+	}
+
+	newPlayer := atsa.CreatePlayerByFullname(name)
+	return &newPlayer
 }

@@ -244,9 +244,8 @@ createApp({
       match.team2 = match.team2.map(player => player.id);
       return match;
     },
-    async handleCall(index) {
-      this.log('INFO', 'Called match index:', index);
-      const match = this.currentMatch(index);
+    async handleCall(match) {
+      this.log('INFO', 'Called match at table:', match.tableNo);
       // speak
       this.textToSpeech(
         await this.buildSpeakText(match, 'speak', 'call_match'),
@@ -260,19 +259,20 @@ createApp({
         await this.notify(match, 'feishu', template);
       }
     },
-    async handleEdit(index) {
-      this.log('INFO', 'Edited match index:', index);
-      const match = this.currentMatch(index);
+    async handleEdit(match) {
+      this.log('INFO', 'Edited match at table:', match.tableNo);
       this.setup.text = await this.buildSpeakText(match, 'speak', 'call_match');
     },
-    async handleRecall(index, id) {
-      this.log('INFO', 'Recalled player ID:', id);
-      const match = JSON.parse(JSON.stringify(this.matches[index]));
-      match.team1 = [id];
-      match.team2 = [];
+    async handleRecall(match, player) {
+      this.log('INFO', 'Recalled player:', player.name);
+      const tempMatch = {
+        tableNo: match.tableNo,
+        team1: [player],
+        team2: [],
+      };
       // speak
       this.textToSpeech(
-        await this.buildSpeakText(match, 'speak', 'recall_player'),
+        await this.buildSpeakText(tempMatch, 'speak', 'recall_player'),
       );
       // web hooks
       const template = 'recall_player';
@@ -358,7 +358,9 @@ createApp({
     validateDiscordWebhookURL() {
       if (this.discordWebhookURL) {
         if (
-          !this.discordWebhookURL.startsWith('https://discord.com/api/webhooks/')
+          !this.discordWebhookURL.startsWith(
+            'https://discord.com/api/webhooks/',
+          )
         ) {
           this.discordWebhookURLClass = 'panel-item-error';
           return false;
