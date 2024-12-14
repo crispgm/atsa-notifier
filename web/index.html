@@ -143,7 +143,7 @@
                   <div class="match-table">{{ match.tableNo }}</div>
                   <div class="match-team match-host">
                     <div class="match-player" v-for="player in match.team1">
-                      <div class="match-player-id">
+                      <div class="match-player-id" v-if="player.id != ''">
                         {{ player.id.slice(-5) }}
                       </div>
                       <div class="match-player-name">{{ player.name }}</div>
@@ -160,7 +160,7 @@
                   <div class="match-vs">vs.</div>
                   <div class="match-team match-away">
                     <div class="match-player" v-for="player in match.team2">
-                      <div class="match-player-id">
+                      <div class="match-player-id" v-if="player.id != ''">
                         {{ player.id.slice(-5) }}
                       </div>
                       <div class="match-player-name">{{ player.name }}</div>
