@@ -55,6 +55,7 @@ func (s *Scraper) Scrape(url string) (*[]Match, error) {
 
 func splitNames(text string) []string {
 	var names []string
+	text = strings.TrimSpace(text)
 	if strings.Contains(text, "/") {
 		names = strings.Split(text, "/")
 		names[0] = strings.TrimSpace(names[0])
