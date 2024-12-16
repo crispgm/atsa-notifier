@@ -58,9 +58,9 @@ func ErrorResponse(c *gin.Context, code int, msg string, data any) {
 func getLogger(c *gin.Context) *logrus.Entry {
 	logger, ok := c.Get("logger")
 	if !ok {
-		logger = logrus.WithField("context", "missing")
+		logger = logrus.WithField("logger", "missing")
 	}
-	logEntry := logger.(*logrus.Entry)
+	logEntry := logger.(*logrus.Logger).WithContext(c)
 
 	return logEntry
 }

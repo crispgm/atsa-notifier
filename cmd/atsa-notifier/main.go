@@ -34,7 +34,11 @@ func main() {
 
 	// Init log
 	log := logrus.New()
+	log.SetFormatter(&logrus.TextFormatter{
+		FullTimestamp: true,
+	})
 	r.Use(func(c *gin.Context) {
+		c.Set("logger", log)
 		start := time.Now()
 		c.Next()
 		duration := time.Since(start)
@@ -47,7 +51,6 @@ func main() {
 			"response_ms": duration.Milliseconds(),
 			"response_us": duration.Microseconds(),
 		}).Info("handled request")
-		c.Set("logger", log)
 	})
 
 	// Serve static files
