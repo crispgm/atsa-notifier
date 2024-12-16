@@ -124,7 +124,6 @@ createApp({
       if (this.voices.length > 0 && !this.setup.selectedVoice) {
         this.setup.selectedVoice = this.voices[0].name; // Select the first available voice
       }
-      this.log('INFO', 'Loaded', this.voices.length, 'voice synthesizers');
     },
     updateLocale() {
       if (this.setup.selectedLocale) {
@@ -237,12 +236,6 @@ createApp({
       } finally {
         this.loading = false;
       }
-    },
-    currentMatch(index) {
-      const match = JSON.parse(JSON.stringify(this.matches[index]));
-      match.team1 = match.team1.map(player => player.id);
-      match.team2 = match.team2.map(player => player.id);
-      return match;
     },
     async handleCall(match) {
       this.log('INFO', 'Called match at table:', match.tableNo);
@@ -394,7 +387,6 @@ createApp({
         this.showWarn('Kickertool Live URL is not valid');
         return;
       }
-      this.log('INFO', 'Synced', this.kickertoolLiveURL);
       try {
         this.loadingError = 'Loading...';
         const url = '/sync?url=' + this.kickertoolLiveURL;
@@ -404,6 +396,10 @@ createApp({
         }
         const data = await response.json();
         this.matches = data.data.matches;
+        if (!this.matches) {
+          this.matches = [];
+        }
+        this.log('INFO', 'Synced', this.matches.length, 'matches from', this.kickertoolLiveURL);
         this.loadingError = '';
       } catch (err) {
         this.showError(err.message);
