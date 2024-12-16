@@ -4,12 +4,16 @@ on:
     tags:
       - 'v*'
 jobs:
-  build:
+  release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Set up Go
       uses: actions/setup-go@v2
@@ -28,14 +32,12 @@ jobs:
       run: |
         GOOS=linux GOARCH=amd64 TAGNAME=${{ github.ref_name }} ./scripts/build.sh
 
-    - name: Create Release
-      id: create_release
-      uses: softprops/action-gh-release@v1
-      with:
-        tag: ${{ github.ref }}
-        files: |
-          atsa-notifier-darwin-amd64.zip
-          atsa-notifier-windows-amd64.zip
-          atsa-notifier-linux-amd64.zip
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Create release
+      run: |
+        gh release create "${{ github.ref_name }}" \
+          --repo="${{ github.repository }}" \
+          --title="ATSA Notifier ${{ github.ref_name }}" \
+          --generate-notes \
+          "./output/atsa-notifier-${{ github.ref_name }}-darwin-amd64.zip" \
+          "./output/atsa-notifier-${{ github.ref_name }}-windows-amd64.zip" \
+          "./output/atsa-notifier-${{ github.ref_name }}-linux-amd64.tar.gz"

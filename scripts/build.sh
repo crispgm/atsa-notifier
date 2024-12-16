@@ -16,14 +16,14 @@ if [ -z "$GOARCH" ]; then
 fi
 
 set +e
-rm -rf output
+rm -rf output/atsa-notifier
 
 set -e
 mkdir -p output/atsa-notifier
 if [ "$GOOS" = "windows" ]; then
-	go build -o ./output/atsa-notifier.exe ./cmd/atsa-notifier
+	GOOS=$GOOS GOARCH=$GOARCH go build -o ./output/atsa-notifier.exe ./cmd/atsa-notifier
 else
-	go build -o ./output/atsa-notifier ./cmd/atsa-notifier
+	GOOS=$GOOS GOARCH=$GOARCH go build -o ./output/atsa-notifier ./cmd/atsa-notifier
 fi
 cp -r ./web ./output/atsa-notifier
 cp -r ./conf ./output/atsa-notifier
@@ -35,4 +35,5 @@ else
 	zip -r "atsa-notifier-${TAGNAME}-${GOOS}-${GOARCH}.zip" ./atsa-notifier
 fi
 rm -rf atsa-notifier
+rm -rf atsa-notifier.exe
 cd ..
