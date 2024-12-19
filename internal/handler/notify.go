@@ -8,13 +8,12 @@ import (
 
 // NotifyParams .
 type NotifyParams struct {
-	TournamentName string        `json:"tournamentName"`
-	EventName      string        `json:"eventName"`
-	EventPhase     string        `json:"eventPhase"`
-	Team1          []atsa.Player `json:"team1"`
-	Team2          []atsa.Player `json:"team2"`
-	TableNo        string        `json:"tableNo"`
-	Locale         string        `json:"locale"`
+	Prefix  string        `json:"prefix"`
+	Postfix string        `json:"postfix"`
+	Team1   []atsa.Player `json:"team1"`
+	Team2   []atsa.Player `json:"team2"`
+	TableNo string        `json:"tableNo"`
+	Locale  string        `json:"locale"`
 
 	MsgType  string `json:"msgType"`  // speak, discord, feishu
 	Template string `json:"template"` // e.g. call_match, recall_player or text; text is given by user manually

@@ -50,21 +50,21 @@ func buildMessage(
 		feishuBuilder := message.Feishu{}
 		if msgType == "speak" {
 			if templateName == "call_match" {
-				msg, err = speakBuilder.CallMatch(&template, params.TournamentName, params.EventName, params.EventPhase, params.TableNo, team1, team2)
+				msg, err = speakBuilder.CallMatch(&template, params.Prefix, params.Postfix, params.TableNo, team1, team2)
 			} else if templateName == "recall_player" {
-				msg, err = speakBuilder.RecallPlayer(&template, params.TournamentName, params.EventName, params.EventPhase, params.TableNo, team1[0])
+				msg, err = speakBuilder.RecallPlayer(&template, params.Prefix, params.Postfix, params.TableNo, team1[0])
 			}
 		} else if msgType == "discord" {
 			if templateName == "call_match" {
-				msg, err = discordBuilder.CallMatch(&template, params.TournamentName, params.EventName, params.EventPhase, params.TableNo, team1, team2)
+				msg, err = discordBuilder.CallMatch(&template, params.Prefix, params.Postfix, params.TableNo, team1, team2)
 			} else if templateName == "recall_player" {
-				msg, err = discordBuilder.RecallPlayer(&template, params.TournamentName, params.EventName, params.EventPhase, params.TableNo, team1[0])
+				msg, err = discordBuilder.RecallPlayer(&template, params.Prefix, params.Postfix, params.TableNo, team1[0])
 			}
 		} else if msgType == "feishu" {
 			if templateName == "call_match" {
-				msg, err = feishuBuilder.CallMatch(&template, params.TournamentName, params.EventName, params.EventPhase, params.TableNo, team1, team2)
+				msg, err = feishuBuilder.CallMatch(&template, params.Prefix, params.Postfix, params.TableNo, team1, team2)
 			} else if templateName == "recall_player" {
-				msg, err = feishuBuilder.RecallPlayer(&template, params.TournamentName, params.EventName, params.EventPhase, params.TableNo, team1[0])
+				msg, err = feishuBuilder.RecallPlayer(&template, params.Prefix, params.Postfix, params.TableNo, team1[0])
 			}
 		}
 	} else {

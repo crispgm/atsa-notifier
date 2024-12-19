@@ -25,32 +25,21 @@
         <div class="main-panel">
           <div id="setup" class="panel">
             <h2>Setup</h2>
-            <h5>Tournament Name</h5>
+            <h5>Prefix</h5>
             <div class="panel-item">
-              <input
-                type="text"
-                name="tName"
-                placeholder="Tournament Name"
-                v-model="setup.tournamentName"
-              />
+              <textarea
+                class="panel-item-textarea"
+                v-model="setup.prefix"
+                placeholder="e.g. Tournament and event info"
+              ></textarea>
             </div>
-            <h5>Event Name</h5>
+            <h5>Postfix</h5>
             <div class="panel-item">
-              <input
-                type="text"
-                name="eName"
-                placeholder="Event Name: e.g. Open Double"
-                v-model="setup.eventName"
-              />
-            </div>
-            <h5>Event Phase</h5>
-            <div class="panel-item">
-              <input
-                type="text"
-                name="ePhase"
-                placeholder="Event Phase: e.g. Qualification"
-                v-model="setup.eventPhase"
-              />
+              <textarea
+                class="panel-item-textarea"
+                v-model="setup.postfix"
+                placeholder="e.g. Additional notices"
+              ></textarea>
             </div>
             <h5>Kickertool Live URL</h5>
             <div class="panel-item">

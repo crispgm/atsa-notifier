@@ -13,18 +13,16 @@ import (
 type Builder interface {
 	CallMatch(
 		template *conf.Template,
-		tName string,
-		eName string,
-		ePhase string,
+		prefix string,
+		postfix string,
 		tableNo string,
 		team1 []atsa.Player,
 		team2 []atsa.Player,
 	) (string, error)
 	RecallPlayer(
 		template *conf.Template,
-		tName string,
-		eName string,
-		ePhase string,
+		prefix string,
+		postfix string,
 		tableNo string,
 		player atsa.Player,
 	) (string, error)

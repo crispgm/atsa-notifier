@@ -5,9 +5,8 @@ createApp({
     return {
       // setup
       setup: {
-        tournamentName: '',
-        eventName: '',
-        eventPhase: '',
+        prefix: '',
+        postfix: '',
         text: '',
         selectedLocale: 'en-US',
         selectedVoice: null,
@@ -108,9 +107,8 @@ createApp({
     handleReset() {
       this.handleClear();
       this.setup = {
-        tournamentName: '',
-        eventName: '',
-        eventPhase: '',
+        prefix: '',
+        postfix: '',
         text: '',
         selectedLocale: 'en-US',
         selectedVoice: null,
@@ -156,9 +154,8 @@ createApp({
         this.loadingError = 'Sending...';
         const url = '/notify';
         const params = {
-          tournamentName: this.setup.tournamentName,
-          eventName: this.setup.eventName,
-          eventPhase: this.setup.eventPhase,
+          prefix: this.setup.prefix,
+          postfix: this.setup.postfix,
           locale: this.setup.selectedLocale,
           team1: match.team1,
           team2: match.team2,
@@ -192,9 +189,8 @@ createApp({
         this.loadingError = 'Sending...';
         const url = '/notify';
         const params = {
-          tournamentName: this.setup.tournamentName,
-          eventName: this.setup.eventName,
-          eventPhase: this.setup.eventPhase,
+          prefix: this.setup.prefix,
+          postfix: this.setup.postfix,
           team1: match.team1,
           team2: match.team2,
           tableNo: match.tableNo,
