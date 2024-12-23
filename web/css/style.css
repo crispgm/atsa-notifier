@@ -130,6 +130,11 @@ footer {
   padding: 4px 4px;
 }
 
+.panel-item input[type="checkbox"] {
+  width: 16px;
+  margin: 8px 4px 0 0;
+}
+
 .panel-item-error {
   background-color: #ffa8a8;
 }

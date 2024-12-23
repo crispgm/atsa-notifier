@@ -27,6 +27,20 @@ type Player struct {
 	FeishuUserID  string `json:"feishuUserID"`
 }
 
+// NameOpt .
+type NameOpt struct {
+	Native bool
+}
+
+// OptName select the correct name with options
+func (p Player) OptName(opt *NameOpt) string {
+	if opt.Native && len(p.NativeName) > 0 {
+		return p.NativeName
+	}
+
+	return p.Name
+}
+
 // CreatePlayerByFullname creates a player with full name
 func CreatePlayerByFullname(fullName string) Player {
 	var firstName, lastName, name string
