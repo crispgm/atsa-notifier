@@ -9,21 +9,25 @@ import (
 	"github.com/crispgm/atsa-notifier/pkg/atsa"
 )
 
+// MsgParams .
+type MsgParams struct {
+	Prefix  string
+	Postfix string
+	TableNo string
+	Native  bool
+}
+
 // Builder interface for Message Builder
 type Builder interface {
 	CallMatch(
 		template *conf.Template,
-		prefix string,
-		postfix string,
-		tableNo string,
+		params *MsgParams,
 		team1 []atsa.Player,
 		team2 []atsa.Player,
 	) (string, error)
 	RecallPlayer(
 		template *conf.Template,
-		prefix string,
-		postfix string,
-		tableNo string,
+		params *MsgParams,
 		player atsa.Player,
 	) (string, error)
 }

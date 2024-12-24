@@ -8,12 +8,13 @@ import (
 
 // NotifyParams .
 type NotifyParams struct {
-	Prefix  string        `json:"prefix"`
-	Postfix string        `json:"postfix"`
-	Team1   []atsa.Player `json:"team1"`
-	Team2   []atsa.Player `json:"team2"`
-	TableNo string        `json:"tableNo"`
-	Locale  string        `json:"locale"`
+	Prefix     string        `json:"prefix"`
+	Postfix    string        `json:"postfix"`
+	Team1      []atsa.Player `json:"team1"`
+	Team2      []atsa.Player `json:"team2"`
+	TableNo    string        `json:"tableNo"`
+	Locale     string        `json:"locale"`
+	NativeName bool          `json:"nativeName"`
 
 	MsgType  string `json:"msgType"`  // speak, discord, feishu
 	Template string `json:"template"` // e.g. call_match, recall_player or text; text is given by user manually
@@ -25,9 +26,10 @@ type NotifyParams struct {
 
 // NotifyOutput .
 type NotifyOutput struct {
-	MsgType  string `json:"msgType"`
-	Template string `json:"template"`
-	Text     string `json:"text"`
+	MsgType    string `json:"msgType"`
+	Template   string `json:"template"`
+	NativeName bool   `json:"nativeName"`
+	Text       string `json:"text"`
 }
 
 // NotifyHandler serves the main page.
@@ -67,6 +69,7 @@ func NotifyHandler(c *gin.Context) {
 	var output NotifyOutput
 	output.MsgType = params.MsgType
 	output.Template = params.Template
+	output.NativeName = params.NativeName
 	output.Text = msg.Content
 	// Send POST request to the Discord webhook
 	if output.MsgType == "discord" {

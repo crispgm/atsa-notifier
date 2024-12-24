@@ -7,6 +7,7 @@ createApp({
       setup: {
         prefix: '',
         postfix: '',
+        nativeName: false,
         text: '',
         selectedLocale: 'en-US',
         selectedVoice: null,
@@ -157,6 +158,7 @@ createApp({
           prefix: this.setup.prefix,
           postfix: this.setup.postfix,
           locale: this.setup.selectedLocale,
+          nativeName: this.setup.nativeName,
           team1: match.team1,
           team2: match.team2,
           tableNo: match.tableNo,
@@ -191,6 +193,7 @@ createApp({
         const params = {
           prefix: this.setup.prefix,
           postfix: this.setup.postfix,
+          nativeName: this.setup.nativeName,
           team1: match.team1,
           team2: match.team2,
           tableNo: match.tableNo,
